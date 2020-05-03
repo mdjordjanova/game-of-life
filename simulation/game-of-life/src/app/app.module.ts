@@ -12,10 +12,6 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'home',
-    loadChildren: () => import('./components/home/home.module').then(m => m.HomeModule)
-  },
-  {
     path: 'simulation',
     loadChildren: () => import('./components/simulation/simulation.module').then(m => m.SimulationModule)
   }

@@ -1,5 +1,6 @@
 # Game Of Life
 
+![](example.gif)
 
 ## Rules
 Game of Life is an infinite, two-dimensional grid of square cells, each of which is in one of two possible states, alive or dead, (or populated and unpopulated). Every cell interacts with its eight neighbours At each step in time, the following transitions occur:
@@ -12,5 +13,3 @@ Thus,
 * Any live cell with two or three live neighbours survives.
 * Any dead cell with three live neighbours becomes a live cell.
 * All other live cells die in the next generation. Similarly, all other dead cells stay dead.
-
-![](example.gif)
