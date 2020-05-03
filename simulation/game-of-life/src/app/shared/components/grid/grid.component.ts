@@ -8,8 +8,8 @@ import { BehaviorSubject, range } from 'rxjs';
   styleUrls: ['./grid.component.scss'],
   template: `
     <div *ngIf="grid$ | async as grid" class="grid">
-      <div class="row" *ngFor="let row of toArray(grid.rows)">
-        <div class="column" *ngFor="let col of toArray(grid.cols)">
+      <div class="row" *ngFor="let row of toArray(grid.dimensions.rows)">
+        <div class="column" *ngFor="let col of toArray(grid.dimensions.cols)">
           <div
             [ngClass]="{
               'active': grid.cells[row][col].active,

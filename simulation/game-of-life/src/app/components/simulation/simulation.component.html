@@ -4,8 +4,8 @@
   <app-grid [grid$]="grid"></app-grid>
 
   <div class="buttons-container">
-    <button>Start</button>
-    <button>Stop</button>
-    <button>Reset</button>
+    <button (click)="start()">Start</button>
+    <button (click)="stop()">Stop</button>
+    <button (click)="reset()">Reset</button>
   </div>
 </app-content>

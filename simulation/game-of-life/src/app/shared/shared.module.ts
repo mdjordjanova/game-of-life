@@ -1,7 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from '@angular/common';
 import { ComponentsModule } from './components/components.module';
-import { LayoutComponent } from './components/layout/layout.component';
+import { GameOfLifeEngine } from './engines/game-of-life.engine';
 
 @NgModule({
   declarations: [],
@@ -12,6 +12,8 @@ import { LayoutComponent } from './components/layout/layout.component';
     CommonModule,
     ComponentsModule
   ],
-  providers: []
+  providers: [
+    GameOfLifeEngine
+  ]
 })
 export class SharedModule { }

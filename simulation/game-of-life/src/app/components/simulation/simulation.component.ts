@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { Grid } from 'src/app/shared/models/grid.model';
 import { BehaviorSubject } from 'rxjs';
+import { GameOfLifeEngine } from 'src/app/shared/engines/game-of-life.engine';
 
 @Component({
   selector: 'app-simulation',
@@ -9,8 +10,22 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class SimulationComponent {
   grid = new BehaviorSubject(null);
+  dimensions = {rows: 30, cols: 30}
+  running = new BehaviorSubject(false);
 
-  constructor() {
-    this.grid.next(new Grid(30, 30));
+  constructor(private engine: GameOfLifeEngine) {
+    this.grid.next(new Grid(this.dimensions));
   }
-}
+
+  start() {
+    this.engine.run(this.grid);
+  }
+
+  stop() {
+    this.running.next(false);
+  }
+
+  reset() {
+    this.grid.next(new Grid(this.dimensions));
+  }
+ }
