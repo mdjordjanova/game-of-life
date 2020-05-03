@@ -3,21 +3,27 @@ import { ContentComponent } from './content/content.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { LayoutComponent } from './layout/layout.component';
+import { CommonModule } from '@angular/common';
+import { GridComponent } from './grid/grid.component';
 
 @NgModule({
   declarations: [
     ContentComponent,
-    HeaderComponent,
     FooterComponent,
+    GridComponent,
+    HeaderComponent,
     LayoutComponent
   ],
   exports: [
     ContentComponent,
-    HeaderComponent,
     FooterComponent,
+    GridComponent,
+    HeaderComponent,
     LayoutComponent
   ],
-  imports: [],
+  imports: [
+    CommonModule
+  ],
   providers: []
 })
 export class ComponentsModule { }

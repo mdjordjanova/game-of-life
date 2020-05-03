@@ -1,0 +1,10 @@
+@import './../../../../assets/scss/variables.scss';
+
+.footer {
+  background-color: $primary-color;
+  position: fixed;
+  height: 50px;
+  width: 100%;
+  bottom: 0px;
+  left: 0;
+}

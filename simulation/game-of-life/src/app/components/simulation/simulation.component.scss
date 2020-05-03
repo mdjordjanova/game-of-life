@@ -1,0 +1,12 @@
+@import './../../../assets/scss/variables.scss';
+
+.buttons-container {
+  display: flex;
+}
+
+button {
+  background-color: $blue-tertiary-color;
+  width: 90px;
+  height: 20px;
+  border-radius: 6px;
+}

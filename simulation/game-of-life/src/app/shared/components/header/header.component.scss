@@ -1,7 +1,36 @@
 @import './../../../../assets/scss/variables.scss';
 
 .header {
+  background-color: $secondary-color;
+  color: $text-color;
+  font-family: Arial, Helvetica, sans-serif;
+  position: fixed;
   width: 100%;
   height: 50px;
-  background-color: $secondary-color;
+  top: 0;
+  left: 0;
+}
+
+.row {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .slot {
+    margin: 10px;
+  }
+
+  .slot.start {
+    width: 15%;
+  }
+
+  .slot.main {
+    width: 70%;
+  }
+
+  .slot.end {
+    width: 15%;
+  }
 }

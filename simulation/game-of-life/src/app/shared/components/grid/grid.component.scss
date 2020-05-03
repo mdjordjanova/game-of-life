@@ -1,0 +1,11 @@
+@import './../../../../assets/scss/variables.scss';
+
+.row {
+  display: flex;
+}
+
+.cell {
+  width: 12px;
+  height: 12px;
+  border: 1px solid $secondary-color;
+}
