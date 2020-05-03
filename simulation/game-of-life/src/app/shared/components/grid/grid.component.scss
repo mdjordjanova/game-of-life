@@ -4,8 +4,16 @@
   display: flex;
 }
 
-.cell {
+.active {
+  width: 12px;
+  height: 12px;
+  border: 1px solid $blue-tertiary-color;
+  background-color: $blue-tertiary-color;
+}
+
+.inactive {
   width: 12px;
   height: 12px;
   border: 1px solid $secondary-color;
+  background-color: #ffffff;
 }

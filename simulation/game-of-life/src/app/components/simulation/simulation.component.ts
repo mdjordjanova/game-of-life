@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Grid } from 'src/app/shared/models/grid.model';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-simulation',
@@ -7,5 +8,9 @@ import { Grid } from 'src/app/shared/models/grid.model';
   templateUrl: 'simulation.component.html'
 })
 export class SimulationComponent {
-  grid = new Grid(30, 50);
+  grid = new BehaviorSubject(null);
+
+  constructor() {
+    this.grid.next(new Grid(30, 30));
+  }
 }
