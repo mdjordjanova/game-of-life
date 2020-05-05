@@ -1,6 +1,9 @@
 <app-header></app-header>
 
 <app-content>
+  <div class="time-container">
+    Time: {{time | async | time}}
+  </div>
   <app-grid [grid$]="grid"></app-grid>
 
   <div class="buttons-container">
