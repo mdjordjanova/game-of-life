@@ -2,6 +2,11 @@ import { Component } from "@angular/core";
 import { Grid } from 'src/app/shared/models/grid.model';
 import { BehaviorSubject, timer, Subscription } from 'rxjs';
 import { GameOfLifeEngine } from 'src/app/shared/engines/game-of-life.engine';
+import { gliderGunPattern } from 'src/app/shared/data/patterns/glider-gun';
+import { FormBuilder } from '@angular/forms';
+import { exploderPattern } from 'src/app/shared/data/patterns/exploder';
+import { favoritePattern } from 'src/app/shared/data/patterns/favorite';
+import { clearPattern } from 'src/app/shared/data/patterns/clear';
 
 @Component({
   selector: 'app-simulation',
@@ -13,39 +18,19 @@ export class SimulationComponent {
   time = new BehaviorSubject(0);
   timeSub = new Subscription(null);
 
-  constructor(private engine: GameOfLifeEngine) {
-    this.grid.next(new Grid({rows: 30, cols: 60},[
-      '............................................................',
-      '............................................................',
-      '...........................X................................',
-      '.........................X.X................................',
-      '...............XX......XX............XX.....................',
-      '..............X...X....XX............XX.....................',
-      '...XX........X.....X...XX...................................',
-      '...XX........X...X.XX....X.X................................',
-      '.............X.....X.......X................................',
-      '..............X...X.........................................',
-      '...............XX...........................................',
-      '............................................................',
-      '............................................................',
-      '............................................................',
-      '............................................................',
-      '............................................................',
-      '............................................................',
-      '............................................................',
-      '............................................................',
-      '............................................................',
-      '............................................................',
-      '............................................................',
-      '............................................................',
-      '............................................................',
-      '............................................................',
-      '............................................................',
-      '............................................................',
-      '............................................................',
-      '............................................................',
-      '............................................................'
-    ]));
+  form = this.formBuilder.group({pattern: [{name: '', config: null}]});
+  pattern = {name: 'gilderGun', config: gliderGunPattern};
+  patterns = [
+    {name: 'Gilder Gun', config: gliderGunPattern},
+    {name: 'Exploder', config: exploderPattern},
+    {name: 'Favorite', config: favoritePattern},
+    {name: 'Clear', config: clearPattern},
+];
+
+  constructor(
+    private engine: GameOfLifeEngine,
+    private formBuilder: FormBuilder) {
+      this.grid.next(new Grid({rows: 30, cols: 60}, this.pattern.config));
   }
 
   start() {
@@ -62,6 +47,11 @@ export class SimulationComponent {
   reset() {
     this.timeSub.unsubscribe();
     this.time.next(0);
-    this.grid.next(new Grid({rows: 30, cols: 30}));
+    this.grid.next(new Grid({rows: 30, cols: 60}, this.pattern.config));
   }
- }
+
+  onChange(event: any) {
+    this.pattern = this.patterns[event.target.value];
+    this.reset();
+  }
+}
