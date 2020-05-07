@@ -1,11 +1,35 @@
 @import './../../../assets/scss/variables.scss';
 
+.menu-container {
+  display: flex;
+  width: 840px;
+}
+
+.select-container {
+  width: 50%;
+  text-align: right;
+
+  select {
+    background-color: $blue-tertiary-color;
+    width: 130px;
+    height: 20px;
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+}
+
 .time-container {
+  width: 50%;
   font-size: 12px;
+}
+
+.grid-container {
+  width: 840px;
 }
 
 .buttons-container {
   display: flex;
+  width: 840px;
 }
 
 button {

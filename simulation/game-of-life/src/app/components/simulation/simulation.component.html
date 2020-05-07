@@ -1,10 +1,22 @@
 <app-header></app-header>
 
 <app-content>
-  <div class="time-container">
-    Time: {{time | async | time}}
+  <div class="menu-container">
+    <div class="time-container">
+      Time: {{time | async | time}}
+    </div>
+    <div class="select-container">
+      <form [formGroup]="form">
+        <select (change)="onChange($event)">
+          <option *ngFor="let pattern of patterns; let i = index" [value]="i">{{pattern.name}}</option>
+        </select>
+      </form>
+    </div>
   </div>
-  <app-grid [grid$]="grid"></app-grid>
+
+  <div class="grid-container">
+    <app-grid [grid$]="grid"></app-grid>
+  </div>
 
   <div class="buttons-container">
     <button (click)="start()">Start</button>
