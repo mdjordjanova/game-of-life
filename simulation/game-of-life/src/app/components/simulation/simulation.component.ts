@@ -18,19 +18,19 @@ export class SimulationComponent {
   time = new BehaviorSubject(0);
   timeSub = new Subscription(null);
 
-  form = this.formBuilder.group({pattern: [{name: '', config: null}]});
-  pattern = {name: 'gilderGun', config: gliderGunPattern};
+  form = this.formBuilder.group({ pattern: [{ name: '', config: null }] });
+  pattern = { name: 'gilderGun', config: gliderGunPattern };
   patterns = [
-    {name: 'Gilder Gun', config: gliderGunPattern},
-    {name: 'Exploder', config: exploderPattern},
-    {name: 'Favorite', config: favoritePattern},
-    {name: 'Clear', config: clearPattern},
-];
+    { name: 'Gilder Gun', config: gliderGunPattern },
+    { name: 'Exploder', config: exploderPattern },
+    { name: 'Favorite', config: favoritePattern },
+    { name: 'Clear', config: clearPattern },
+  ];
 
   constructor(
     private engine: GameOfLifeEngine,
     private formBuilder: FormBuilder) {
-      this.grid.next(new Grid({rows: 30, cols: 60}, this.pattern.config));
+    this.grid.next(new Grid({ rows: 30, cols: 60 }, this.pattern.config));
   }
 
   start() {
@@ -47,7 +47,7 @@ export class SimulationComponent {
   reset() {
     this.timeSub.unsubscribe();
     this.time.next(0);
-    this.grid.next(new Grid({rows: 30, cols: 60}, this.pattern.config));
+    this.grid.next(new Grid({ rows: 30, cols: 60 }, this.pattern.config));
   }
 
   onChange(event: any) {

@@ -14,7 +14,7 @@ import { BehaviorSubject, range } from 'rxjs';
             [ngClass]="{
               'active': grid.cells[row][col].active,
               'inactive': !grid.cells[row][col].active}"
-            (click)="onClick(grid, row, col)">
+            (click)="onClick($event, grid, row, col)" (mouseover)="onMouseOver($event,grid, row, col)">
           </div>
         </div>
       <div>
@@ -24,6 +24,15 @@ import { BehaviorSubject, range } from 'rxjs';
 export class GridComponent {
   @Input() grid$: BehaviorSubject<Grid>;
 
+  private startRow: number = null;
+  private startCol: number = null;
+
+  private lastRow: number = null;
+  private lastCol: number = null;
+
+  private currentRow: number = null;
+  private currentCol: number = null;
+
   toArray(n: number): number[] {
     let arr = [];
     for (let i = 0; i < n; i++) {
@@ -32,8 +41,72 @@ export class GridComponent {
     return arr;
   }
 
-  onClick(grid: Grid, row: number, col: number) {
-    grid.cells[row][col].active = !grid.cells[row][col].active;
+  constructor() {
+    document.addEventListener('keydown', this.onKeydownEvent.bind(this), false);
+    document.addEventListener('keyup', this.onKeyupEvent.bind(this), false);
+  }
+
+  onClick(event: MouseEvent, grid: Grid, row: number, col: number) {
+    if (this.startCol !== null && this.startRow !== null && event.shiftKey) {
+      grid.drawLine(this.startCol, this.startRow, this.lastCol, this.lastRow, false);
+
+      this.lastRow = null;
+      this.lastCol = null;
+    } else {
+      grid.cells[row][col].active = !grid.cells[row][col].active;
+    }
+
+    this.startRow = row;
+    this.startCol = col;
+
     this.grid$.next(grid);
+  }
+
+
+
+  onMouseOver(event: MouseEvent, grid: Grid, row: number, col: number) {
+    this.currentRow = row;
+    this.currentCol = col;
+
+    if (event.shiftKey) {
+      this.previewLine(grid);
+    }
+
+    if (event.buttons) {
+      grid.cells[row][col].active = !grid.cells[row][col].active;
+      this.grid$.next(grid);
+    }
+  }
+
+  previewLine(grid: Grid) {
+    if (this.startCol !== null && this.startRow !== null) {
+      this.resetLine(grid);
+
+      this.lastRow = this.currentRow;
+      this.lastCol = this.currentCol;
+
+      grid.drawLine(this.startCol, this.startRow, this.lastCol, this.lastRow);
+    }
+  }
+
+  resetLine(grid: Grid) {
+    if (this.startCol !== null && this.startRow !== null && this.lastCol !== null && this.lastRow !== null) {
+      grid.drawLine(this.startCol, this.startRow, this.lastCol, this.lastRow);
+
+      this.lastRow = null;
+      this.lastCol = null;
+    }
+  }
+
+  onKeydownEvent(event: KeyboardEvent) {
+    if (event.key === 'Shift') {
+      this.previewLine(this.grid$.value);
+    }
+  }
+
+  onKeyupEvent(event: KeyboardEvent) {
+    if (event.key === 'Shift') {
+      this.resetLine(this.grid$.value);
+    }
   }
 }
