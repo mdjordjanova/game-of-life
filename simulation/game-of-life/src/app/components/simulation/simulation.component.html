@@ -19,8 +19,9 @@
   </div>
 
   <div class="buttons-container">
-    <button (click)="start()">Start</button>
-    <button (click)="stop()">Stop</button>
+    <button [disabled]="running" (click)="start()">Start</button>
+    <button [disabled]="!running" (click)="stop()">Stop</button>
+    <button [disabled]="running" (click)="step()">Step</button>
     <button (click)="reset()">Reset</button>
   </div>
   <h3>Use the shift key to make lines</h3>
