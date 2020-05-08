@@ -17,6 +17,7 @@ export class SimulationComponent {
   grid = new BehaviorSubject(null);
   time = new BehaviorSubject(0);
   timeSub = new Subscription(null);
+  running = false;
 
   form = this.formBuilder.group({ pattern: [{ name: '', config: null }] });
   pattern = { name: 'gilderGun', config: gliderGunPattern };
@@ -34,6 +35,10 @@ export class SimulationComponent {
   }
 
   start() {
+    if (this.running) return;
+
+    this.running = true;
+
     this.timeSub = timer(0, 100).subscribe(_ => {
       this.time.next(this.time.value + 1);
       this.engine.run(this.grid);
@@ -42,12 +47,19 @@ export class SimulationComponent {
 
   stop() {
     this.timeSub.unsubscribe();
+    this.running = false;
   }
 
   reset() {
-    this.timeSub.unsubscribe();
+    stop();
+
     this.time.next(0);
     this.grid.next(new Grid({ rows: 30, cols: 60 }, this.pattern.config));
+  }
+
+  step() {
+    this.time.next(this.time.value + 1);
+    this.engine.run(this.grid);
   }
 
   onChange(event: any) {
