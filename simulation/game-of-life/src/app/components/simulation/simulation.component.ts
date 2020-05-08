@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
 import { Grid } from 'src/app/shared/models/grid.model';
 import { BehaviorSubject, timer, Subscription } from 'rxjs';
 import { GameOfLifeEngine } from 'src/app/shared/engines/game-of-life.engine';
@@ -35,7 +35,7 @@ export class SimulationComponent {
   }
 
   start() {
-    if (this.running) return;
+    if (this.running) { return; }
 
     this.running = true;
 

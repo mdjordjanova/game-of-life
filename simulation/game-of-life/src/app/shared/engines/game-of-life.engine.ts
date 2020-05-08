@@ -9,16 +9,16 @@ export class GameOfLifeEngine {
 
   run(grid$: BehaviorSubject<Grid>) {
 
-    let grid = <Grid>clone(grid$.value);
-    let updatedGrid = grid$.value;
+    const grid = clone(grid$.value) as Grid;
+    const updatedGrid = grid$.value;
 
     for (let i = 0; i < grid.cells.length; i++) {
       for (let j = 0; j < grid.cells[i].length; j++) {
-        let activeNeighbours = this.getActiveNeighbours(grid.cells[i][j], grid).length;
+        const activeNeighbours = this.getActiveNeighbours(grid.cells[i][j], grid).length;
 
         if (grid.cells[i][j].active) {
 
-          if (activeNeighbours != 2 && activeNeighbours != 3) {
+          if (activeNeighbours !== 2 && activeNeighbours !== 3) {
             updatedGrid.cells[i][j].active = false;
           }
 
@@ -40,25 +40,25 @@ export class GameOfLifeEngine {
     const rows = grid.dimensions.rows;
     const cols = grid.dimensions.cols;
 
-    let neighbours = [];
-    if (y != 0) neighbours.push(grid.cells[x][y - 1]);
-    if (y != cols - 1) neighbours.push(grid.cells[x][y + 1]);
-    if (x != 0 && y != 0) neighbours.push(grid.cells[x - 1][y - 1]);
-    if (x != 0) neighbours.push(grid.cells[x - 1][y]);
-    if (x != 0 && y != cols - 1) neighbours.push(grid.cells[x - 1][y + 1]);
-    if (x != rows - 1 && y != 0) neighbours.push(grid.cells[x + 1][y - 1]);
-    if (x != rows - 1) neighbours.push(grid.cells[x + 1][y]);
-    if (x != rows - 1 && y != cols - 1) neighbours.push(grid.cells[x + 1][y + 1]);
+    const neighbours = [];
+    if (y !== 0) { neighbours.push(grid.cells[x][y - 1]); }
+    if (y !== cols - 1) { neighbours.push(grid.cells[x][y + 1]); }
+    if (x !== 0 && y !== 0) { neighbours.push(grid.cells[x - 1][y - 1]); }
+    if (x !== 0) { neighbours.push(grid.cells[x - 1][y]); }
+    if (x !== 0 && y !== cols - 1) { neighbours.push(grid.cells[x - 1][y + 1]); }
+    if (x !== rows - 1 && y !== 0) { neighbours.push(grid.cells[x + 1][y - 1]); }
+    if (x !== rows - 1) { neighbours.push(grid.cells[x + 1][y]); }
+    if (x !== rows - 1 && y !== cols - 1) { neighbours.push(grid.cells[x + 1][y + 1]); }
 
     return neighbours;
   }
 
   private getActiveNeighbours(cell: Cell, grid: Grid): Cell[] {
-    let neighbours = this.getNeighbours(cell, grid);
-    let activeNeigbours = [];
+    const neighbours = this.getNeighbours(cell, grid);
+    const activeNeigbours = [];
 
-    for (let neighbour of neighbours) {
-      if (neighbour.active) activeNeigbours.push(neighbour);
+    for (const neighbour of neighbours) {
+      if (neighbour.active) { activeNeigbours.push(neighbour); }
     }
     return activeNeigbours;
   }
@@ -68,8 +68,8 @@ export class GameOfLifeEngine {
   }
 
   private isEdge(cell: Cell, grid: Grid): boolean {
-    if (cell.coordinates.x === 0 || cell.coordinates.y === 0) return true;
-    if (cell.coordinates.x === grid.dimensions.rows - 1 || cell.coordinates.y === grid.dimensions.cols - 1) return true;
+    if (cell.coordinates.x === 0 || cell.coordinates.y === 0) { return true; }
+    if (cell.coordinates.x === grid.dimensions.rows - 1 || cell.coordinates.y === grid.dimensions.cols - 1) { return true; }
     return false;
   }
 

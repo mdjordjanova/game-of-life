@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+import { NgModule } from '@angular/core';
 import { SimulationComponent } from './simulation.component';
 import { Routes, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';

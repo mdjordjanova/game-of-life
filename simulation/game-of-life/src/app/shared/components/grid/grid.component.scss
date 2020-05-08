@@ -1,4 +1,4 @@
-@import "./../../../../assets/scss/variables.scss";
+@import './../../../../assets/scss/variables.scss';
 
 .row {
   display: flex;
@@ -20,9 +20,11 @@
 }
 
 .inactive:hover {
-  background-color: $primary-color;
+  background-color: $blue-tertiary-color;
+  opacity: 0.5;
 }
 
 .active:hover {
-  background-color: $primary-color;
+  background-color: $blue-tertiary-color;
+  opacity: 0.5;
 }

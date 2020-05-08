@@ -4,10 +4,10 @@ export class Time {
   hours: number;
 
   constructor(seconds: number) {
-    this.hours = Math.floor(seconds/3600);
+    this.hours = Math.floor(seconds / 3600);
     seconds = seconds - this.hours * 3600;
 
-    this.minutes = Math.floor(seconds/60);
+    this.minutes = Math.floor(seconds / 60);
     this.seconds = (seconds - this.minutes * 60) % 60;
   }
 

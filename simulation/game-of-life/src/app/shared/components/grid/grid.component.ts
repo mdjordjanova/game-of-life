@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges, SimpleChange } from "@angular/core";
+import { Component, Input, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { Cell } from '../../models/cell.model';
 import { Grid } from '../../models/grid.model';
 import { BehaviorSubject, range } from 'rxjs';
@@ -34,7 +34,7 @@ export class GridComponent {
   private currentCol: number = null;
 
   toArray(n: number): number[] {
-    let arr = [];
+    const arr = [];
     for (let i = 0; i < n; i++) {
       arr[i] = i;
     }
