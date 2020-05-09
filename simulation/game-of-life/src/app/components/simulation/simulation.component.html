@@ -6,8 +6,9 @@
       Time: {{time | async | time}}
     </div>
     <div class="select-container">
-      <form [formGroup]="form">
-        <select (change)="onChange($event)">
+      <button (click)="openModal('save-pattern')">Save</button>
+      <form [formGroup]="selectForm">
+        <select (change)="onChange($event, patterns)">
           <option *ngFor="let pattern of patterns; let i = index" [value]="i">{{pattern.name}}</option>
         </select>
       </form>
@@ -25,3 +26,15 @@
     <button (click)="reset()">Reset</button>
   </div>
 </app-content>
+
+<app-modal [id]="'save-pattern'">
+  <h2>Save pattern</h2>
+  <form [formGroup]="saveForm">
+    <label>
+      Name:
+      <input type="text" [formControlName]="'name'">
+    </label>
+  </form>
+  <button (click)="savePattern(saveForm)">Save</button>
+  <button (click)="closeModal('save-pattern')">Cancel</button>
+</app-modal>
