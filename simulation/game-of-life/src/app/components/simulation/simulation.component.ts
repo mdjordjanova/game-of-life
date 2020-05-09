@@ -67,6 +67,13 @@ export class SimulationComponent {
     this.grid.next(new Grid({ rows: 30, cols: 60 }, this.pattern.config));
   }
 
+  clear() {
+    stop();
+
+    this.time.next(0);
+    this.grid.next(new Grid({ rows: 30, cols: 60 }, clearPattern));
+  }
+
   step() {
     this.time.next(this.time.value + 1);
     this.engine.run(this.grid);
