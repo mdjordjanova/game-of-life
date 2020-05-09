@@ -3,7 +3,7 @@ import { Grid } from 'src/app/shared/models/grid.model';
 import { BehaviorSubject, timer, Subscription } from 'rxjs';
 import { GameOfLifeEngine } from 'src/app/shared/engines/game-of-life.engine';
 import { gliderGunPattern } from 'src/app/shared/data/patterns/glider-gun';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { exploderPattern } from 'src/app/shared/data/patterns/exploder';
 import { favoritePattern } from 'src/app/shared/data/patterns/favorite';
 import { clearPattern } from 'src/app/shared/data/patterns/clear';
@@ -32,7 +32,8 @@ export class SimulationComponent {
   ];
 
   saveForm = this.formBuilder.group({
-    name: ['']
+    name: ['', Validators.required],
+    description: ['']
   });
 
   constructor(

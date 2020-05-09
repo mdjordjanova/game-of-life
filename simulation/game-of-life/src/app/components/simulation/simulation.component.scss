@@ -7,8 +7,8 @@
 
 .select-container {
   display: flex;
-  width: 50%;
-  text-align: right;
+  width: 420px;
+  padding-left: 400px;
 
   select {
     background-color: $blue-tertiary-color;
@@ -20,7 +20,7 @@
 }
 
 .time-container {
-  width: 50%;
+  width: 420px;
   font-size: 12px;
 }
 
@@ -38,4 +38,41 @@ button {
   width: 90px;
   height: 20px;
   border-radius: 6px;
+}
+
+.modal {
+  padding: 30px;
+  color: $primary-color;
+
+  form {
+    display: grid;
+
+    label {
+      width: 80px;
+      font-size: 15.5px;
+    }
+
+    input {
+      margin-left: 20px;
+      width: 200px;
+    }
+  }
+
+  h2 {
+    margin-bottom: 30px;
+  }
+
+  .buttons-container {
+    margin-top: 30px;
+
+    button {
+      margin-right: 5px;
+    }
+  }
+}
+
+.row {
+  display: flex;
+  margin: 1px;
+  line-height: 1.4;
 }

@@ -28,13 +28,24 @@
 </app-content>
 
 <app-modal [id]="'save-pattern'">
-  <h2>Save pattern</h2>
-  <form [formGroup]="saveForm">
-    <label>
-      Name:
-      <input type="text" [formControlName]="'name'">
-    </label>
-  </form>
-  <button (click)="savePattern(saveForm)">Save</button>
-  <button (click)="closeModal('save-pattern')">Cancel</button>
+  <div class="modal">
+    <h2>Add new pattern</h2>
+
+    <form [formGroup]="saveForm">
+      <div class="row">
+        <label>Name:</label>
+        <input type="text" [formControlName]="'name'">
+      </div>
+
+      <div class="row">
+        <label>Description:</label>
+        <input type="text" [formControlName]="'description'">
+      </div>
+    </form>
+
+    <div class="buttons-container">
+      <button (click)="savePattern(saveForm); closeModal('save-pattern')" [disabled]="!saveForm.valid">Save</button>
+      <button (click)="closeModal('save-pattern')">Cancel</button>
+    </div>
+  </div>
 </app-modal>
