@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ComponentsModule } from './components/components.module';
 import { GameOfLifeEngine } from './engines/game-of-life.engine';
 import { PipesModule } from './pipes/pipes.module';
+import { ModalService } from './services/modal.service';
 
 @NgModule({
   declarations: [],
@@ -16,7 +17,8 @@ import { PipesModule } from './pipes/pipes.module';
     PipesModule
   ],
   providers: [
-    GameOfLifeEngine
+    GameOfLifeEngine,
+    ModalService
   ]
 })
 export class SharedModule { }

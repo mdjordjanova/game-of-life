@@ -7,6 +7,7 @@ import { FormBuilder } from '@angular/forms';
 import { exploderPattern } from 'src/app/shared/data/patterns/exploder';
 import { favoritePattern } from 'src/app/shared/data/patterns/favorite';
 import { clearPattern } from 'src/app/shared/data/patterns/clear';
+import { ModalService } from 'src/app/shared/services/modal.service';
 
 @Component({
   selector: 'app-simulation',
@@ -30,7 +31,8 @@ export class SimulationComponent {
 
   constructor(
     private engine: GameOfLifeEngine,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private modalService: ModalService) {
     this.grid.next(new Grid({ rows: 30, cols: 60 }, this.pattern.config));
   }
 
@@ -65,5 +67,15 @@ export class SimulationComponent {
   onChange(event: any) {
     this.pattern = this.patterns[event.target.value];
     this.reset();
+  }
+
+  openModal(id: string) {
+    console.log('open modal');
+    this.modalService.open(id);
+  }
+
+  closeModal(id: string) {
+    console.log('close modal');
+    this.modalService.close(id);
   }
 }

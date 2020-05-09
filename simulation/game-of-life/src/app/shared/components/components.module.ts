@@ -4,17 +4,20 @@ import { HeaderComponent } from './header/header.component';
 import { CommonModule } from '@angular/common';
 import { GridComponent } from './grid/grid.component';
 import { RouterModule } from '@angular/router';
+import { ModalComponent } from './modal/modal.component';
 
 @NgModule({
   declarations: [
     ContentComponent,
     GridComponent,
-    HeaderComponent
+    HeaderComponent,
+    ModalComponent
   ],
   exports: [
     ContentComponent,
     GridComponent,
-    HeaderComponent
+    HeaderComponent,
+    ModalComponent
   ],
   imports: [
     CommonModule,
