@@ -10,6 +10,12 @@ import { clearPattern } from 'src/app/shared/data/patterns/clear';
 import { ModalService } from 'src/app/shared/services/modal.service';
 import { LocalStorage } from 'src/app/shared/utilities/object-storage';
 import { translateToPattern } from 'src/app/shared/utilities/translate-to-pattern.utitlity';
+import { tenCellInfiniteGrowth } from 'src/app/shared/data/patterns/10-cell-infiinite-growth';
+import { oneHundredOnePattern } from 'src/app/shared/data/patterns/101';
+import { smallExploderPattern } from 'src/app/shared/data/patterns/small-exploder';
+import { glidersPattern } from 'src/app/shared/data/patterns/gliders';
+import { seventeenC45Reaction } from 'src/app/shared/data/patterns/17c45_reaction';
+import { twoFumaroles } from 'src/app/shared/data/patterns/fumaroles';
 
 @Component({
   selector: 'app-simulation',
@@ -27,7 +33,12 @@ export class SimulationComponent {
   patterns = [
     { name: 'Gilder Gun', config: gliderGunPattern },
     { name: 'Exploder', config: exploderPattern },
-    { name: 'Favorite', config: favoritePattern },
+    { name: 'Small Exploder', config: smallExploderPattern },
+    { name: 'Gliders', config: glidersPattern },
+    { name: '10 Cell Infinite Growth', config: tenCellInfiniteGrowth },
+    { name: '101', config: oneHundredOnePattern },
+    { name: '17c45 Reaction', config: seventeenC45Reaction },
+    { name: '2 Fumaroles', config: twoFumaroles },
     { name: 'Clear', config: clearPattern },
   ];
 
