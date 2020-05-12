@@ -16,6 +16,7 @@ import { smallExploderPattern } from 'src/app/shared/data/patterns/small-explode
 import { glidersPattern } from 'src/app/shared/data/patterns/gliders';
 import { seventeenC45Reaction } from 'src/app/shared/data/patterns/17c45_reaction';
 import { twoFumaroles } from 'src/app/shared/data/patterns/fumaroles';
+import { pattern_22p36 } from 'src/app/shared/data/patterns/22p36';
 
 @Component({
   selector: 'app-simulation',
@@ -39,6 +40,7 @@ export class SimulationComponent {
     { name: '101', config: oneHundredOnePattern },
     { name: '17c45 Reaction', config: seventeenC45Reaction },
     { name: '2 Fumaroles', config: twoFumaroles },
+    { name: '22p36', config: pattern_22p36 },
     { name: 'Clear', config: clearPattern },
   ];
 
