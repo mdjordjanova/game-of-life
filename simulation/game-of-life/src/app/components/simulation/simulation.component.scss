@@ -76,3 +76,19 @@ button {
   margin: 1px;
   line-height: 1.4;
 }
+
+.content {
+  display: flex;
+}
+
+.simulation-container {
+  width: 65%;
+}
+
+.charts-container {
+  width: 35%;
+
+  .charts {
+    width: 100%;
+  }
+}

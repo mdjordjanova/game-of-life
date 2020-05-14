@@ -1,30 +1,60 @@
 <app-header></app-header>
 
 <app-content>
-  <div class="menu-container">
-    <div class="time-container">
-      Time: {{time | async | time}}
+  <div class="content">
+    <div class="simulation-container">
+      <div class="menu-container">
+        <div class="time-container">
+          Time: {{time | async | time}}
+        </div>
+        <div class="select-container">
+          <button (click)="openModal('save-pattern')">Save</button>
+          <form [formGroup]="selectForm">
+            <select (change)="onChange($event, patterns)">
+              <option *ngFor="let pattern of patterns; let i = index" [value]="i">{{pattern.name}}</option>
+            </select>
+          </form>
+        </div>
+      </div>
+    
+      <div class="grid-container">
+        <app-grid [grid$]="grid"></app-grid>
+      </div>
+    
+      <div class="buttons-container">
+        <button [disabled]="running" (click)="start()">Start</button>
+        <button [disabled]="!running" (click)="stop()">Stop</button>
+        <button [disabled]="running" (click)="step()">Step</button>
+        <button (click)="reset()">Reset</button>
+        <button (click)="clear()">Clear</button>
+      </div>
     </div>
-    <div class="select-container">
-      <button (click)="openModal('save-pattern')">Save</button>
-      <form [formGroup]="selectForm">
-        <select (change)="onChange($event, patterns)">
-          <option *ngFor="let pattern of patterns; let i = index" [value]="i">{{pattern.name}}</option>
-        </select>
-      </form>
+
+    <div class="charts-container">
+      <div class="charts">
+        <canvas baseChart 
+            [datasets]="lineChartData" 
+            [labels]="lineChartLabels" 
+            [options]="lineChartOptions"
+            [colors]="lineChartColors" 
+            [legend]="lineChartLegend" 
+            [chartType]="lineChartType" 
+            [plugins]="lineChartPlugins">
+        </canvas>
+      </div>
+
+      <div class="charts">
+        <canvas baseChart 
+            [datasets]="lineChartData" 
+            [labels]="lineChartLabels" 
+            [options]="lineChartOptions"
+            [colors]="lineChartColors" 
+            [legend]="lineChartLegend" 
+            [chartType]="lineChartType" 
+            [plugins]="lineChartPlugins">
+        </canvas>
+      </div>
     </div>
-  </div>
-
-  <div class="grid-container">
-    <app-grid [grid$]="grid"></app-grid>
-  </div>
-
-  <div class="buttons-container">
-    <button [disabled]="running" (click)="start()">Start</button>
-    <button [disabled]="!running" (click)="stop()">Stop</button>
-    <button [disabled]="running" (click)="step()">Step</button>
-    <button (click)="reset()">Reset</button>
-    <button (click)="clear()">Clear</button>
   </div>
 </app-content>
 
