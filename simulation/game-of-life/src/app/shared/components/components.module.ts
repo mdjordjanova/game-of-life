@@ -5,23 +5,28 @@ import { CommonModule } from '@angular/common';
 import { GridComponent } from './grid/grid.component';
 import { RouterModule } from '@angular/router';
 import { ModalComponent } from './modal/modal.component';
+import { LineChartComponent } from './line-chart/line-chart.component';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
     ContentComponent,
     GridComponent,
     HeaderComponent,
+    LineChartComponent,
     ModalComponent
   ],
   exports: [
     ContentComponent,
     GridComponent,
     HeaderComponent,
+    LineChartComponent,
     ModalComponent
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    ChartsModule
   ],
   providers: []
 })

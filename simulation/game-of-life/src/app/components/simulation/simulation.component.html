@@ -32,27 +32,11 @@
 
     <div class="charts-container">
       <div class="charts">
-        <canvas baseChart 
-            [datasets]="lineChartData" 
-            [labels]="lineChartLabels" 
-            [options]="lineChartOptions"
-            [colors]="lineChartColors" 
-            [legend]="lineChartLegend" 
-            [chartType]="lineChartType" 
-            [plugins]="lineChartPlugins">
-        </canvas>
+        <app-line-chart [setup]="lineChartSetup"></app-line-chart>
       </div>
-
+      
       <div class="charts">
-        <canvas baseChart 
-            [datasets]="lineChartData" 
-            [labels]="lineChartLabels" 
-            [options]="lineChartOptions"
-            [colors]="lineChartColors" 
-            [legend]="lineChartLegend" 
-            [chartType]="lineChartType" 
-            [plugins]="lineChartPlugins">
-        </canvas>
+        <app-line-chart [setup]="lineChartSetup"></app-line-chart>
       </div>
     </div>
   </div>

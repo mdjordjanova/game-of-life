@@ -17,8 +17,7 @@ import { glidersPattern } from 'src/app/shared/data/patterns/gliders';
 import { seventeenC45Reaction } from 'src/app/shared/data/patterns/17c45_reaction';
 import { twoFumaroles } from 'src/app/shared/data/patterns/fumaroles';
 import { pattern_22p36 } from 'src/app/shared/data/patterns/22p36';
-import { ChartDataSets } from 'chart.js';
-import { Label, Color } from 'ng2-charts';
+import { LineChartSetup } from 'src/app/shared/models/chart.model';
 
 @Component({
   selector: 'app-simulation',
@@ -51,13 +50,7 @@ export class SimulationComponent {
     description: ['']
   });
 
-  lineChartData: ChartDataSets[];
-  lineChartLabels: Label[]
-  lineChartOptions: {responsive: boolean};
-  lineChartColors: Color[];
-  lineChartLegend = true;
-  lineChartPlugins = [];
-  lineChartType = 'line';
+  lineChartSetup = new LineChartSetup();
 
   constructor(
     private engine: GameOfLifeEngine,
@@ -133,12 +126,12 @@ export class SimulationComponent {
   }
 
   initChart() {
-    this.lineChartData = [{ data: [85, 72, 78, 75, 77, 75], label: 'Number of active cells' }];
-    this.lineChartLabels = ['1', '2', '3', '4', '5', '6'];
-    this.lineChartOptions = { responsive: true };
-    this.lineChartColors = [{ borderColor: '#F6F4F2', backgroundColor: '#F6F4F2' }];
-    this.lineChartLegend = true;
-    this.lineChartPlugins = [];
-    this.lineChartType = 'line';
+    this.lineChartSetup.data = [{ data: [85, 72, 78, 75, 77, 75], label: 'Number of active cells' }];
+    this.lineChartSetup.labels = ['1', '2', '3', '4', '5', '6'];
+    this.lineChartSetup.options = { responsive: true };
+    this.lineChartSetup.colors = [{ borderColor: '#F6F4F2', backgroundColor: '#F6F4F2' }];
+    this.lineChartSetup.legend = true;
+    this.lineChartSetup.plugins = [];
+    this.lineChartSetup.type = 'line';
   }
 }
