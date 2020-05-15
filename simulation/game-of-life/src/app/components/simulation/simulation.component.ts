@@ -128,7 +128,7 @@ export class SimulationComponent {
   }
 
   collectData() {
-    this.activeCells.push(this.grid.value.getActiveCells().length);
+    this.activeCells.push(this.grid.value.getCells('active').length);
     this.activeCellsLabels.push(this.time.value);
   }
 
