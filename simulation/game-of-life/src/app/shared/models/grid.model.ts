@@ -1,5 +1,6 @@
 import { Cell } from '../models/cell.model';
 import { Dimensions } from './dimensions.model';
+import { clone } from '../utilities/clone.utility';
 
 export interface IGrid {
   dimensions: Dimensions;
@@ -19,6 +20,40 @@ export class Grid implements IGrid {
         this.cells[i][j] = new Cell({ x: i, y: j }, pattern[i][j] !== '.');
       }
     }
+  }
+
+  getCells(condition: string): Cell[] {
+    return condition === 'active' ? this.getActiveCells() : this.getInactiveCells();
+  }
+
+  getActiveCells(): Cell[] {
+    const cells = clone(this.cells);
+    const selectedCells = [];
+
+    for (let i = 0; i < this.dimensions.rows; i++) {
+      for (let j = 0; j < this.dimensions.cols; j++) {
+        if (cells[i][j].active) {
+          selectedCells.push(cells[i][j]);
+        }
+      }
+    }
+
+    return selectedCells;
+  }
+
+  getInactiveCells(): Cell[] {
+    const cells = clone(this.cells);
+    const selectedCells = [];
+
+    for (let i = 0; i < this.dimensions.rows; i++) {
+      for (let j = 0; j < this.dimensions.cols; j++) {
+        if (!cells[i][j].active) {
+          selectedCells.push(cells[i][j]);
+        }
+      }
+    }
+
+    return selectedCells;
   }
 
   // https://www.freecodecamp.org/news/how-to-code-your-first-algorithm-draw-a-line-ca121f9a1395/

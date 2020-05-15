@@ -25,7 +25,7 @@ import { LineChartSetup } from 'src/app/shared/models/chart.model';
   templateUrl: 'simulation.component.html'
 })
 export class SimulationComponent {
-  grid = new BehaviorSubject(null);
+  grid = new BehaviorSubject<Grid>(null);
   time = new BehaviorSubject(0);
   timeSub = new Subscription(null);
   running = false;
@@ -50,7 +50,9 @@ export class SimulationComponent {
     description: ['']
   });
 
-  lineChartSetup = new LineChartSetup();
+  activeCells = [];
+  activeCellsLabels = [];
+  lineChartSetup = new LineChartSetup(null, null);
 
   constructor(
     private engine: GameOfLifeEngine,
@@ -58,7 +60,6 @@ export class SimulationComponent {
     private modalService: ModalService) {
     this.grid.next(new Grid({ rows: 30, cols: 60 }, this.pattern.config));
     this.patterns = this.patterns.concat(LocalStorage.getItem('patterns', []));
-    this.initChart();
   }
 
   start() {
@@ -69,6 +70,7 @@ export class SimulationComponent {
     this.timeSub = timer(0, 100).subscribe(_ => {
       this.time.next(this.time.value + 1);
       this.engine.run(this.grid);
+      this.collectData();
     });
   }
 
@@ -125,13 +127,12 @@ export class SimulationComponent {
     form.get('name').setValue('');
   }
 
-  initChart() {
-    this.lineChartSetup.data = [{ data: [85, 72, 78, 75, 77, 75], label: 'Number of active cells' }];
-    this.lineChartSetup.labels = ['1', '2', '3', '4', '5', '6'];
-    this.lineChartSetup.options = { responsive: true };
-    this.lineChartSetup.colors = [{ borderColor: '#F6F4F2', backgroundColor: '#F6F4F2' }];
-    this.lineChartSetup.legend = true;
-    this.lineChartSetup.plugins = [];
-    this.lineChartSetup.type = 'line';
+  collectData() {
+    this.activeCells.push(this.grid.value.getActiveCells().length);
+    this.activeCellsLabels.push(this.time.value);
+  }
+
+  drawChart() {
+    this.lineChartSetup = new LineChartSetup([{data: this.activeCells, label: 'active cells'}], this.activeCellsLabels);
   }
 }
