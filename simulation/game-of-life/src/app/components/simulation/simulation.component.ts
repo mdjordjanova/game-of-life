@@ -66,6 +66,7 @@ export class SimulationComponent {
     private modalService: ModalService) {
     this.grid.next(new Grid({ rows: 30, cols: 60 }, this.pattern.config));
     this.patterns = this.patterns.concat(LocalStorage.getItem('patterns', []));
+    this.drawCharts();
   }
 
   start() {
@@ -90,6 +91,8 @@ export class SimulationComponent {
 
     this.time.next(0);
     this.grid.next(new Grid({ rows: 30, cols: 60 }, this.pattern.config));
+
+    this.resetCharts();
   }
 
   clear() {
@@ -152,10 +155,16 @@ export class SimulationComponent {
   }
 
   resetCharts() {
+    this.active = [];
+    this.activeLabels = [];
     this.activeLineChartSetup = new LineChartSetup([{data: [], label: 'active cells'}], []);
     this.activeLineChartSetup.colors = [{ borderColor: '#ACBFE6', backgroundColor: '#ACBFE6' }];
 
+    this.inactive = [];
+    this.inactiveLabels = [];
     this.inactiveLineChartSetup = new LineChartSetup([{data: [], label: 'inactive cells'}], []);
     this.inactiveLineChartSetup.colors = [{ borderColor: '#F8E5E5', backgroundColor: '#F8E5E5' }];
+
+    this.drawCharts();
   }
 }

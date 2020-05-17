@@ -22,7 +22,7 @@
       </div>
     
       <div class="buttons-container">
-        <button [disabled]="running" (click)="start(); drawCharts();">Start</button>
+        <button [disabled]="running" (click)="start();">Start</button>
         <button [disabled]="!running" (click)="stop()">Stop</button>
         <button [disabled]="running" (click)="step()">Step</button>
         <button (click)="reset()">Reset</button>
