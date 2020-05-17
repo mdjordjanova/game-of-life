@@ -150,7 +150,7 @@ export class SimulationComponent {
     this.activeLineChartSetup = new LineChartSetup([{data: this.active, label: 'active cells'}], this.activeLabels);
     this.activeLineChartSetup.colors = [{ borderColor: '#ACBFE6', backgroundColor: '#ACBFE6' }];
 
-    this.inactiveLineChartSetup = new LineChartSetup([{data: this.inactive, label: 'inactive cells'}], this.inactive);
+    this.inactiveLineChartSetup = new LineChartSetup([{data: this.inactive, label: 'inactive cells'}], this.inactiveLabels);
     this.inactiveLineChartSetup.colors = [{ borderColor: '#F8E5E5', backgroundColor: '#F8E5E5' }];
   }
 
