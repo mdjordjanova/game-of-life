@@ -22,7 +22,7 @@
       </div>
     
       <div class="buttons-container">
-        <button [disabled]="running" (click)="start(); drawChart();">Start</button>
+        <button [disabled]="running" (click)="start(); drawCharts();">Start</button>
         <button [disabled]="!running" (click)="stop()">Stop</button>
         <button [disabled]="running" (click)="step()">Step</button>
         <button (click)="reset()">Reset</button>
@@ -32,11 +32,11 @@
 
     <div class="charts-container">
       <div class="charts">
-        <app-line-chart [setup]="lineChartSetup"></app-line-chart>
+        <app-line-chart [setup]="activeLineChartSetup"></app-line-chart>
       </div>
       
       <div class="charts">
-        <app-line-chart [setup]="lineChartSetup"></app-line-chart>
+        <app-line-chart [setup]="inactiveLineChartSetup"></app-line-chart>
       </div>
     </div>
   </div>
