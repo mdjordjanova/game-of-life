@@ -52,11 +52,13 @@ export class SimulationComponent {
 
   active = [];
   activeLabels = [];
-  activeLineChartSetup = new LineChartSetup(null, null);
+  activeLineChartSetup = new LineChartSetup([{data: [], label: 'active cells'}], [], null,
+    [{ borderColor: '#ACBFE6', backgroundColor: '#ACBFE6' }]);
 
   inactive = [];
   inactiveLabels = [];
-  inactiveLineChartSetup = new LineChartSetup(null, null);
+  inactiveLineChartSetup = new LineChartSetup([{data: [], label: 'inactive cells'}], [], null,
+    [{ borderColor: '#F8E5E5', backgroundColor: '#F8E5E5' }]);
 
   constructor(
     private engine: GameOfLifeEngine,
@@ -95,6 +97,8 @@ export class SimulationComponent {
 
     this.time.next(0);
     this.grid.next(new Grid({ rows: 30, cols: 60 }, clearPattern));
+
+    this.resetCharts();
   }
 
   step() {
@@ -148,7 +152,10 @@ export class SimulationComponent {
   }
 
   resetCharts() {
-    this.activeLineChartSetup = new LineChartSetup([{data: [], label: ''}], []);
-    this.inactiveLineChartSetup = new LineChartSetup([{data: [], label: ''}], []);
+    this.activeLineChartSetup = new LineChartSetup([{data: [], label: 'active cells'}], []);
+    this.activeLineChartSetup.colors = [{ borderColor: '#ACBFE6', backgroundColor: '#ACBFE6' }];
+
+    this.inactiveLineChartSetup = new LineChartSetup([{data: [], label: 'inactive cells'}], []);
+    this.inactiveLineChartSetup.colors = [{ borderColor: '#F8E5E5', backgroundColor: '#F8E5E5' }];
   }
 }
