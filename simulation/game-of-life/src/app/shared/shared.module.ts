@@ -4,6 +4,8 @@ import { ComponentsModule } from './components/components.module';
 import { GameOfLifeEngine } from './engines/game-of-life.engine';
 import { PipesModule } from './pipes/pipes.module';
 import { ModalService } from './services/modal.service';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [],

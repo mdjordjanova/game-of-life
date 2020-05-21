@@ -8,10 +8,9 @@ import { clearPattern } from 'src/app/shared/data/patterns/clear';
 import { ModalService } from 'src/app/shared/services/modal.service';
 import { LocalStorage } from 'src/app/shared/utilities/object-storage';
 import { translateToPattern } from 'src/app/shared/utilities/translate-to-pattern.utitlity';
-import { LineChartSetup, ChartColor } from 'src/app/shared/models/chart.model';
+import { LineChartSetup } from 'src/app/shared/models/chart.model';
 import { patterns } from 'src/app/shared/data/constants/patterns';
 import { Pattern } from 'src/app/shared/models/pattern.model';
-import { ColorPallete } from 'src/app/shared/data/constants/colors';
 
 @Component({
   selector: 'app-simulation',
