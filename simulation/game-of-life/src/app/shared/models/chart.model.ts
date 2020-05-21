@@ -50,3 +50,13 @@ export class Options {
   legend?: { labels: any };
   scales?: { yAxes?: any; xAxes?: any };
 }
+
+export class Color {
+  borderColor: string;
+  backgroundColor: string;
+
+  constructor(borderColor: string, backgroundColor: string) {
+    this.borderColor = borderColor;
+    this.backgroundColor = backgroundColor;
+  }
+}

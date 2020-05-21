@@ -4,20 +4,14 @@ import { BehaviorSubject, timer, Subscription } from 'rxjs';
 import { GameOfLifeEngine } from 'src/app/shared/engines/game-of-life.engine';
 import { gliderGunPattern } from 'src/app/shared/data/patterns/glider-gun';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { exploderPattern } from 'src/app/shared/data/patterns/exploder';
-import { favoritePattern } from 'src/app/shared/data/patterns/favorite';
 import { clearPattern } from 'src/app/shared/data/patterns/clear';
 import { ModalService } from 'src/app/shared/services/modal.service';
 import { LocalStorage } from 'src/app/shared/utilities/object-storage';
 import { translateToPattern } from 'src/app/shared/utilities/translate-to-pattern.utitlity';
-import { tenCellInfiniteGrowth } from 'src/app/shared/data/patterns/10-cell-infiinite-growth';
-import { oneHundredOnePattern } from 'src/app/shared/data/patterns/101';
-import { smallExploderPattern } from 'src/app/shared/data/patterns/small-exploder';
-import { glidersPattern } from 'src/app/shared/data/patterns/gliders';
-import { seventeenC45Reaction } from 'src/app/shared/data/patterns/17c45_reaction';
-import { twoFumaroles } from 'src/app/shared/data/patterns/fumaroles';
-import { pattern_22p36 } from 'src/app/shared/data/patterns/22p36';
-import { LineChartSetup } from 'src/app/shared/models/chart.model';
+import { LineChartSetup, Color } from 'src/app/shared/models/chart.model';
+import { patterns } from 'src/app/shared/data/constants/patterns';
+import { Pattern } from 'src/app/shared/models/pattern.model';
+import { ColorPallete } from 'src/app/shared/data/constants/colors';
 
 @Component({
   selector: 'app-simulation',
@@ -30,20 +24,9 @@ export class SimulationComponent {
   timeSub = new Subscription(null);
   running = false;
 
-  selectForm = this.formBuilder.group({ pattern: [{ name: '', config: null }] });
-  pattern = { name: 'Gilder Gun', config: gliderGunPattern };
-  patterns = [
-    { name: 'Gilder Gun', config: gliderGunPattern },
-    { name: 'Exploder', config: exploderPattern },
-    { name: 'Small Exploder', config: smallExploderPattern },
-    { name: 'Gliders', config: glidersPattern },
-    { name: '10 Cell Infinite Growth', config: tenCellInfiniteGrowth },
-    { name: '101', config: oneHundredOnePattern },
-    { name: '17c45 Reaction', config: seventeenC45Reaction },
-    { name: '2 Fumaroles', config: twoFumaroles },
-    { name: '22p36', config: pattern_22p36 },
-    { name: 'Clear', config: clearPattern },
-  ];
+  selectForm = this.formBuilder.group({ pattern: [new Pattern('', null)] });
+  pattern = new Pattern('Gilder Gun', gliderGunPattern);
+  patterns = patterns;
 
   saveForm = this.formBuilder.group({
     name: ['', Validators.required],
@@ -53,12 +36,7 @@ export class SimulationComponent {
   active = [];
   activeLabels = [];
   activeLineChartSetup = new LineChartSetup([{data: [], label: 'active cells'}], [], null,
-    [{ borderColor: '#ACBFE6', backgroundColor: '#ACBFE6' }]);
-
-  inactive = [];
-  inactiveLabels = [];
-  inactiveLineChartSetup = new LineChartSetup([{data: [], label: 'inactive cells'}], [], null,
-    [{ borderColor: '#F8E5E5', backgroundColor: '#F8E5E5' }]);
+    [new Color(ColorPallete.blue.tertiary, ColorPallete.blue.tertiary)]);
 
   constructor(
     private engine: GameOfLifeEngine,
@@ -141,29 +119,18 @@ export class SimulationComponent {
   collectData() {
     this.active.push(this.grid.value.getCells('active').length);
     this.activeLabels.push(this.time.value);
-
-    this.inactive.push(this.grid.value.getCells('inactive').length);
-    this.inactiveLabels.push(this.time.value);
   }
 
   drawCharts() {
-    this.activeLineChartSetup = new LineChartSetup([{data: this.active, label: 'active cells'}], this.activeLabels);
-    this.activeLineChartSetup.colors = [{ borderColor: '#ACBFE6', backgroundColor: '#ACBFE6' }];
-
-    this.inactiveLineChartSetup = new LineChartSetup([{data: this.inactive, label: 'inactive cells'}], this.inactiveLabels);
-    this.inactiveLineChartSetup.colors = [{ borderColor: '#F8E5E5', backgroundColor: '#F8E5E5' }];
+    this.activeLineChartSetup = new LineChartSetup([{data: this.active, label: 'active cells',}], this.activeLabels);
+    this.activeLineChartSetup.colors = [new Color(ColorPallete.blue.tertiary, ColorPallete.blue.tertiary)];
   }
 
   resetCharts() {
     this.active = [];
     this.activeLabels = [];
     this.activeLineChartSetup = new LineChartSetup([{data: [], label: 'active cells'}], []);
-    this.activeLineChartSetup.colors = [{ borderColor: '#ACBFE6', backgroundColor: '#ACBFE6' }];
-
-    this.inactive = [];
-    this.inactiveLabels = [];
-    this.inactiveLineChartSetup = new LineChartSetup([{data: [], label: 'inactive cells'}], []);
-    this.inactiveLineChartSetup.colors = [{ borderColor: '#F8E5E5', backgroundColor: '#F8E5E5' }];
+    this.activeLineChartSetup.colors = [new Color(ColorPallete.blue.tertiary, ColorPallete.blue.tertiary)];
 
     this.drawCharts();
   }
