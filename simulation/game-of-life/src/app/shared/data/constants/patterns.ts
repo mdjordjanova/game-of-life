@@ -5,7 +5,7 @@ import { glidersPattern } from '../patterns/gliders';
 import { tenCellInfiniteGrowth } from '../patterns/10-cell-infiinite-growth';
 import { oneHundredOnePattern } from '../patterns/101';
 import { seventeenC45Reaction } from '../patterns/17c45_reaction';
-import { pattern_22p36 } from '../patterns/22p36';
+import { pattern22p36 } from '../patterns/22p36';
 import { twoFumaroles } from '../patterns/fumaroles';
 import { clearPattern } from '../patterns/clear';
 
@@ -18,6 +18,6 @@ export const patterns = [
   { name: '101', config: oneHundredOnePattern },
   { name: '17c45 Reaction', config: seventeenC45Reaction },
   { name: '2 Fumaroles', config: twoFumaroles },
-  { name: '22p36', config: pattern_22p36 },
+  { name: '22p36', config: pattern22p36 },
   { name: 'Clear', config: clearPattern },
 ];

@@ -7,7 +7,7 @@ class ObjectStorage {
     constructor(private readonly storage: Storage) { }
 
     public getItem<T>(key: string, defaultData: T | (() => T) | null = null): T | null {
-        if (!key) throw new Error(this.getItem.name + ' exception: No key specified.');
+        if (!key) { throw new Error(this.getItem.name + ' exception: No key specified.'); }
 
         try {
             const text = this.storage.getItem(key);
@@ -15,23 +15,23 @@ class ObjectStorage {
 
             if (result !== null) {
 
-                if (defaultData === null) return result;
-                if (defaultData instanceof Function) return result;
-                if (typeof defaultData === 'string') return result;
-                if (defaultData instanceof String) return result;
+                if (defaultData === null) { return result; }
+                if (defaultData instanceof Function) { return result; }
+                if (typeof defaultData === 'string') { return result; }
+                if (defaultData instanceof String) { return result; }
 
                 return deepmerge(defaultData, result);
             }
         } catch {
         }
 
-        if (defaultData instanceof Function) return defaultData();
+        if (defaultData instanceof Function) { return defaultData(); }
 
         return defaultData;
     }
 
     public setItem<T>(key: string, value: T): void {
-        if (!key) throw new Error(this.setItem.name + ' exception: No key specified.');
+        if (!key) { throw new Error(this.setItem.name + ' exception: No key specified.'); }
 
         const result: string = JSON.stringify(value);
 
@@ -39,7 +39,7 @@ class ObjectStorage {
     }
 
     public removeItem(key: string): void {
-        if (!key) throw new Error(this.removeItem.name + ' exception: No key specified.');
+        if (!key) { throw new Error(this.removeItem.name + ' exception: No key specified.'); }
 
         this.storage.removeItem(key);
     }

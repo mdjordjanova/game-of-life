@@ -1,7 +1,8 @@
-import { Component, Input, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
-import { Cell } from '../../models/cell.model';
+import { Component, Input } from '@angular/core';
 import { Grid } from '../../models/grid.model';
-import { BehaviorSubject, range } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { onMouseOver, onClick, previewLine, resetLine, onKeydownEvent, onKeyupEvent } from '../../utilities/draw-line.utility';
+import { toArray } from '../../utilities/array.utility';
 
 @Component({
   selector: 'app-grid',
@@ -24,89 +25,14 @@ import { BehaviorSubject, range } from 'rxjs';
 export class GridComponent {
   @Input() grid$: BehaviorSubject<Grid>;
 
-  private startRow: number = null;
-  private startCol: number = null;
-
-  private lastRow: number = null;
-  private lastCol: number = null;
-
-  private currentRow: number = null;
-  private currentCol: number = null;
-
-  toArray(n: number): number[] {
-    const arr = [];
-    for (let i = 0; i < n; i++) {
-      arr[i] = i;
-    }
-    return arr;
-  }
+  toArray = toArray;
+  onMouseOver = onMouseOver;
+  onClick = onClick;
+  previewLine = previewLine;
+  resetLine = resetLine;
 
   constructor() {
-    document.addEventListener('keydown', this.onKeydownEvent.bind(this), false);
-    document.addEventListener('keyup', this.onKeyupEvent.bind(this), false);
-  }
-
-  onClick(event: MouseEvent, grid: Grid, row: number, col: number) {
-    if (this.startCol !== null && this.startRow !== null && event.shiftKey) {
-      grid.drawLine(this.startCol, this.startRow, this.lastCol, this.lastRow, false);
-
-      this.lastRow = null;
-      this.lastCol = null;
-    } else {
-      grid.cells[row][col].active = !grid.cells[row][col].active;
-    }
-
-    this.startRow = row;
-    this.startCol = col;
-
-    this.grid$.next(grid);
-  }
-
-
-
-  onMouseOver(event: MouseEvent, grid: Grid, row: number, col: number) {
-    this.currentRow = row;
-    this.currentCol = col;
-
-    if (event.shiftKey) {
-      this.previewLine(grid);
-    }
-
-    if (event.buttons) {
-      grid.cells[row][col].active = !grid.cells[row][col].active;
-      this.grid$.next(grid);
-    }
-  }
-
-  previewLine(grid: Grid) {
-    if (this.startCol !== null && this.startRow !== null) {
-      this.resetLine(grid);
-
-      this.lastRow = this.currentRow;
-      this.lastCol = this.currentCol;
-
-      grid.drawLine(this.startCol, this.startRow, this.lastCol, this.lastRow);
-    }
-  }
-
-  resetLine(grid: Grid) {
-    if (this.startCol !== null && this.startRow !== null && this.lastCol !== null && this.lastRow !== null) {
-      grid.drawLine(this.startCol, this.startRow, this.lastCol, this.lastRow);
-
-      this.lastRow = null;
-      this.lastCol = null;
-    }
-  }
-
-  onKeydownEvent(event: KeyboardEvent) {
-    if (event.key === 'Shift') {
-      this.previewLine(this.grid$.value);
-    }
-  }
-
-  onKeyupEvent(event: KeyboardEvent) {
-    if (event.key === 'Shift') {
-      this.resetLine(this.grid$.value);
-    }
+    document.addEventListener('keydown', onKeydownEvent.bind(this), false);
+    document.addEventListener('keyup', onKeyupEvent.bind(this), false);
   }
 }

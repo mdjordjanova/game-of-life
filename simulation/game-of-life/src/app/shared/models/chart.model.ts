@@ -1,57 +1,47 @@
-export interface IChart { }
+import { defaultOptions } from '../data/constants/charts';
+import { ColorPallete } from '../data/constants/colors';
+
+export interface IChart {
+  data: ChartData[];
+}
 
 export class LineChartSetup implements IChart {
-  data: [{data: number[], label: string}];
+  data: ChartData[];
   labels: string[];
-  options: Options;
-  colors: [{ borderColor: string, backgroundColor: string }];
+  options: ChartOptions;
+  colors: ChartColor[];
   legend: boolean;
   plugins: any;
   type = 'line';
 
-  defaultOptions = {
-    responsive: true,
-    legend: {
-      labels: {
-        fontColor: 'grey',
-        fontSize: 10
-      }
-    },
-    scales: {
-      yAxes: [{
-        ticks: {
-          fontColor: 'grey',
-          fontSize: 10
-        }
-      }],
-      xAxes: [{
-        ticks: {
-          fontColor: 'grey',
-          fontSize: 10
-        }
-      }]
-    }
-  }
-
-  constructor(data: [{data: number[], label: string}], labels: string[], options?: Options,
-    colors?: [{ borderColor: string, backgroundColor: string }], legend?: boolean, plugins?: any) {
+  constructor(data: ChartData[], labels: string[], options?: ChartOptions, colors?: ChartColor[], legend?: boolean, plugins?: any) {
       this.data = data;
       this.labels = labels;
-      this.options = options ? options : this.defaultOptions;
-      this.colors = colors ? colors : [{ borderColor: '#F6F4F2', backgroundColor: '#ACBFE6' }];
+      this.options = options ? options : defaultOptions;
+      this.colors = colors ? colors : [ new ChartColor(ColorPallete.blue.tertiary, ColorPallete.blue.tertiary)];
       this.legend = legend ? legend : true;
       this.plugins = plugins ? plugins : [];
       this.type = 'line';
     }
 }
 
-export class Options {
+export class ChartData {
+  data: number[];
+  label: string;
+
+  constructor(data: number[], label: string) {
+    this.data = data;
+    this.label = label;
+  }
+}
+
+export class ChartOptions {
   responsive?: boolean;
   legend?: { labels: any };
   scales?: { yAxes?: any; xAxes?: any };
 }
 
-export class Color {
+export class ChartColor {
   borderColor: string;
   backgroundColor: string;
 

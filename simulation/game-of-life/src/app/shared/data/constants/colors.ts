@@ -1,5 +1,5 @@
 export const ColorPallete = {
-  
+
   default: {
     primary: '#425664',
     secondary: '#F6F4F2',
@@ -17,4 +17,4 @@ export const ColorPallete = {
     secondary: '#C39EA0',
     tertiary: '#F8E5E5'
   }
-}
+};

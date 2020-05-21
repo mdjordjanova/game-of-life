@@ -8,7 +8,7 @@ import { clearPattern } from 'src/app/shared/data/patterns/clear';
 import { ModalService } from 'src/app/shared/services/modal.service';
 import { LocalStorage } from 'src/app/shared/utilities/object-storage';
 import { translateToPattern } from 'src/app/shared/utilities/translate-to-pattern.utitlity';
-import { LineChartSetup, Color } from 'src/app/shared/models/chart.model';
+import { LineChartSetup, ChartColor } from 'src/app/shared/models/chart.model';
 import { patterns } from 'src/app/shared/data/constants/patterns';
 import { Pattern } from 'src/app/shared/models/pattern.model';
 import { ColorPallete } from 'src/app/shared/data/constants/colors';
@@ -35,8 +35,7 @@ export class SimulationComponent {
 
   active = [];
   activeLabels = [];
-  activeLineChartSetup = new LineChartSetup([{data: [], label: 'active cells'}], [], null,
-    [new Color(ColorPallete.blue.tertiary, ColorPallete.blue.tertiary)]);
+  activeLineChartSetup = new LineChartSetup([{data: [], label: 'active cells'}], [], null);
 
   constructor(
     private engine: GameOfLifeEngine,
@@ -102,8 +101,7 @@ export class SimulationComponent {
   }
 
   savePattern(form: FormGroup) {
-    const newPattern = {name: form.get('name').value, config: translateToPattern(this.grid.value)};
-
+    const newPattern = new Pattern(form.get('name').value, translateToPattern(this.grid.value));
     const customPatterns = LocalStorage.getItem('patterns', []);
 
     customPatterns.push(newPattern);
@@ -122,15 +120,13 @@ export class SimulationComponent {
   }
 
   drawCharts() {
-    this.activeLineChartSetup = new LineChartSetup([{data: this.active, label: 'active cells',}], this.activeLabels);
-    this.activeLineChartSetup.colors = [new Color(ColorPallete.blue.tertiary, ColorPallete.blue.tertiary)];
+    this.activeLineChartSetup = new LineChartSetup([{data: this.active, label: 'active cells'}], this.activeLabels);
   }
 
   resetCharts() {
     this.active = [];
     this.activeLabels = [];
     this.activeLineChartSetup = new LineChartSetup([{data: [], label: 'active cells'}], []);
-    this.activeLineChartSetup.colors = [new Color(ColorPallete.blue.tertiary, ColorPallete.blue.tertiary)];
 
     this.drawCharts();
   }
