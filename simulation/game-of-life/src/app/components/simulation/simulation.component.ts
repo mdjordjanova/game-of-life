@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Grid } from 'src/app/shared/models/grid.model';
-import { BehaviorSubject, timer, Subscription } from 'rxjs';
+import { BehaviorSubject, timer, Subscription, Observable } from 'rxjs';
 import { GameOfLifeEngine } from 'src/app/shared/engines/game-of-life.engine';
 import { gliderGunPattern } from 'src/app/shared/data/patterns/glider-gun';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -11,6 +11,7 @@ import { translateToPattern } from 'src/app/shared/utilities/translate-to-patter
 import { LineChartSetup } from 'src/app/shared/models/chart.model';
 import { patterns } from 'src/app/shared/data/constants/patterns';
 import { Pattern } from 'src/app/shared/models/pattern.model';
+import { PatternService } from 'src/app/shared/services/pattern.service';
 
 @Component({
   selector: 'app-simulation',
@@ -18,6 +19,8 @@ import { Pattern } from 'src/app/shared/models/pattern.model';
   templateUrl: 'simulation.component.html'
 })
 export class SimulationComponent {
+  storedPatterns: Observable<Pattern[]>;
+
   grid = new BehaviorSubject<Grid>(null);
   time = new BehaviorSubject(0);
   timeSub = new Subscription(null);
@@ -39,9 +42,11 @@ export class SimulationComponent {
   constructor(
     private engine: GameOfLifeEngine,
     private formBuilder: FormBuilder,
-    private modalService: ModalService) {
+    private modalService: ModalService,
+    private patternService: PatternService) {
     this.grid.next(new Grid({ rows: 30, cols: 60 }, this.pattern.config));
     this.patterns = this.patterns.concat(LocalStorage.getItem('patterns', []));
+    this.storedPatterns = this.patternService.getPatterns();
     this.drawCharts();
   }
 
@@ -98,11 +103,16 @@ export class SimulationComponent {
     this.modalService.close(id);
   }
 
+  createPattern(pattern: Pattern) {
+    this.patternService.createPattern(pattern);
+  }
+
   savePattern(form: FormGroup) {
     const newPattern = new Pattern(form.get('name').value, translateToPattern(this.grid.value));
     const customPatterns = LocalStorage.getItem('patterns', []);
 
     customPatterns.push(newPattern);
+    this.createPattern(newPattern);
     LocalStorage.setItem('patterns', customPatterns);
 
     this.patterns.push(newPattern);

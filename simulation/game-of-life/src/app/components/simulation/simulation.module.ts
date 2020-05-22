@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ChartsModule } from 'ng2-charts';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PatternService } from 'src/app/shared/services/pattern.service';
 
 const routes: Routes = [
   {
@@ -25,6 +26,8 @@ const routes: Routes = [
     SharedModule,
     ChartsModule
   ],
-  providers: []
+  providers: [
+    PatternService
+  ]
 })
 export class SimulationModule { }
