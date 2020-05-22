@@ -7,11 +7,13 @@
         <div class="time-container">
           Time: {{time | async | time}}
         </div>
-        <div class="select-container">
+        <div class="select-container" *ngIf="patterns$ | async as patterns">
           <button (click)="openModal('save-pattern')">Save</button>
           <form [formGroup]="selectForm">
             <select (change)="onChange($event, patterns)">
-              <option *ngFor="let pattern of patterns; let i = index" [value]="i">{{pattern.name}}</option>
+              <ng-container>
+                <option *ngFor="let pattern of patterns; let i = index" [value]="i">{{pattern.name}}</option>
+              </ng-container>
             </select>
           </form>
         </div>

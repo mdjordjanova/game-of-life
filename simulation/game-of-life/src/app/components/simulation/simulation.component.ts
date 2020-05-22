@@ -19,8 +19,6 @@ import { PatternService } from 'src/app/shared/services/pattern.service';
   templateUrl: 'simulation.component.html'
 })
 export class SimulationComponent {
-  storedPatterns: Observable<Pattern[]>;
-
   grid = new BehaviorSubject<Grid>(null);
   time = new BehaviorSubject(0);
   timeSub = new Subscription(null);
@@ -28,7 +26,7 @@ export class SimulationComponent {
 
   selectForm = this.formBuilder.group({ pattern: [new Pattern('', null)] });
   pattern = new Pattern('Gilder Gun', gliderGunPattern);
-  patterns = patterns;
+  patterns$: Observable<Pattern[]>
 
   saveForm = this.formBuilder.group({
     name: ['', Validators.required],
@@ -45,8 +43,7 @@ export class SimulationComponent {
     private modalService: ModalService,
     private patternService: PatternService) {
     this.grid.next(new Grid({ rows: 30, cols: 60 }, this.pattern.config));
-    this.patterns = this.patterns.concat(LocalStorage.getItem('patterns', []));
-    this.storedPatterns = this.patternService.getPatterns();
+    this.patterns$ = this.patternService.getPatterns();
     this.drawCharts();
   }
 
@@ -103,19 +100,9 @@ export class SimulationComponent {
     this.modalService.close(id);
   }
 
-  createPattern(pattern: Pattern) {
-    this.patternService.createPattern(pattern);
-  }
-
   savePattern(form: FormGroup) {
     const newPattern = new Pattern(form.get('name').value, translateToPattern(this.grid.value));
-    const customPatterns = LocalStorage.getItem('patterns', []);
-
-    customPatterns.push(newPattern);
-    this.createPattern(newPattern);
-    LocalStorage.setItem('patterns', customPatterns);
-
-    this.patterns.push(newPattern);
+    this.patternService.createPattern(newPattern);
   }
 
   resetForm(form: FormGroup) {

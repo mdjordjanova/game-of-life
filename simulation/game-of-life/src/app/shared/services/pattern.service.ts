@@ -10,7 +10,7 @@ export class PatternService {
 
   getPatterns(): Observable<Pattern[]> {
     return this.firestore.collection('patterns').snapshotChanges().pipe(
-      map(data => data.map(e => { console.log(e.payload.doc.data()); return e.payload.doc.data() as Pattern; }))
+      map(data => data.map(e => { return e.payload.doc.data() as Pattern; }))
     );
   }
 
