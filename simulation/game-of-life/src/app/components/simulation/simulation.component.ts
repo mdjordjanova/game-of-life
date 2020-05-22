@@ -51,9 +51,7 @@ export class SimulationComponent {
     this.running = true;
 
     this.timeSub = timer(0, 100).subscribe(_ => {
-      this.time.next(this.time.value + 1);
-      this.engine.run(this.grid);
-      this.collectData();
+      this.step();
     });
   }
 
@@ -83,6 +81,7 @@ export class SimulationComponent {
   step() {
     this.time.next(this.time.value + 1);
     this.engine.run(this.grid);
+    this.collectData();
   }
 
   onChange(event: any, patterns: any) {
@@ -114,6 +113,11 @@ export class SimulationComponent {
   }
 
   collectData() {
+    if (this.active.length > 40 && this.activeLabels.length > 40) {
+      this.active.shift();
+      this.activeLabels.shift();
+    }
+
     this.active.push(this.grid.value.getCells('active').length);
     this.activeLabels.push(this.time.value);
   }
