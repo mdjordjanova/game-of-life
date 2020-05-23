@@ -10,6 +10,7 @@ import { ChartsModule } from 'ng2-charts';
 import { SlidePanelComponent } from './slide-panel/slide-panel.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SlideButtonComponent } from './slide-button/slide-button';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HeaderComponent,
     LineChartComponent,
     ModalComponent,
+    SlideButtonComponent,
     SlidePanelComponent
   ],
   exports: [
@@ -26,6 +28,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     HeaderComponent,
     LineChartComponent,
     ModalComponent,
+    SlideButtonComponent,
     SlidePanelComponent
   ],
   imports: [

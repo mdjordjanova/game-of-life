@@ -30,7 +30,13 @@
 
 .buttons-container {
   display: flex;
-  width: 840px;
+  width: 420px;
+}
+
+.slider-container {
+  display: flex;
+  width: 420px;
+  padding-left: 200px;
 }
 
 button {

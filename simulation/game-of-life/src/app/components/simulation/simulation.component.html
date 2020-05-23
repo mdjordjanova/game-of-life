@@ -23,12 +23,17 @@
         <app-grid [grid$]="grid"></app-grid>
       </div>
     
-      <div class="buttons-container">
-        <button [disabled]="running" (click)="start();">Start</button>
-        <button [disabled]="!running" (click)="stop()">Stop</button>
-        <button [disabled]="running" (click)="step()">Step</button>
-        <button (click)="reset()">Reset</button>
-        <button (click)="clear()">Clear</button>
+      <div class="menu-container">
+        <div class="buttons-container">
+          <button [disabled]="running" (click)="start();">Start</button>
+          <button [disabled]="!running" (click)="stop()">Stop</button>
+          <button [disabled]="running" (click)="step()">Step</button>
+          <button (click)="reset()">Reset</button>
+          <button (click)="clear()">Clear</button>
+        </div>
+        <div class="slider-container">
+          <app-slide-button></app-slide-button>
+        </div>
       </div>
     </div>
 
