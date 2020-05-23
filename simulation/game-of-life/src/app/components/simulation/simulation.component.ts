@@ -11,7 +11,7 @@ import { translateToPattern } from 'src/app/shared/utilities/translate-to-patter
 import { patterns } from 'src/app/shared/data/constants/patterns';
 import { Pattern } from 'src/app/shared/models/pattern.model';
 import { PatternService } from 'src/app/shared/services/pattern.service';
-import { LineChartComponent } from 'src/app/shared/components/line-chart/line-chart.component';
+import { LineChartComponent, IChartData } from 'src/app/shared/components/line-chart/line-chart.component';
 
 @Component({
   selector: 'app-simulation',
@@ -23,7 +23,7 @@ export class SimulationComponent {
   time = new BehaviorSubject(0);
   timeSub = new Subscription(null);
   running = false;
-  chartData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  chartData: BehaviorSubject<IChartData[]> = new BehaviorSubject<IChartData[]>([]);
   @ViewChild('lineChart') lineChart: LineChartComponent;
 
   selectForm = this.formBuilder.group({ pattern: [new Pattern('', null)] });
