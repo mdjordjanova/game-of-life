@@ -39,8 +39,8 @@ export class ChartOptions {
   responsive?: boolean;
   legend?: { labels: any };
   scales?: { yAxes?: any; xAxes?: any };
-  animation?: { duration: number };// general animation time
-  hover?: { animationDuration: number };// duration of animations when hovering an item
+  animation?: { duration: number }; // general animation time
+  hover?: { animationDuration: number }; // duration of animations when hovering an item
   responsiveAnimationDuration?: number; // animation duration after a resize
 }
 

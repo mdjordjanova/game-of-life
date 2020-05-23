@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-slide-button',
@@ -8,8 +8,8 @@ import { Component, Input } from "@angular/core";
   `
 })
 export class SlideButtonComponent {
-  @Input() min: number = 0;
-  @Input() max: number = 1;
-  @Input() step: number = 0.05;
-  @Input() value: number = 0.5;
+  @Input() min = 0;
+  @Input() max = 1;
+  @Input() step = 0.05;
+  @Input() value = 0.5;
 }
