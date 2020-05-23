@@ -18,6 +18,10 @@ const routes: Routes = [
   {
     path: 'simulation',
     loadChildren: () => import('./components/simulation/simulation.module').then(m => m.SimulationModule)
+  },
+  {
+    path: 'library',
+    loadChildren: () => import('./components/library/library.module').then(m => m.LibraryModule)
   }
 ];
 
