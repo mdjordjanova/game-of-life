@@ -3,6 +3,7 @@ export interface IPattern {
 }
 
 export class Pattern implements IPattern {
+  id?: string;
   name: string;
   config: string[];
 

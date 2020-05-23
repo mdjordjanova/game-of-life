@@ -105,6 +105,14 @@ export class SimulationComponent {
     this.patternService.createPattern(newPattern);
   }
 
+  updatePattern(pattern: Pattern) {
+    this.patternService.updatePattern(pattern);
+  }
+
+  deletePattern(patternId: string) {
+    this.patternService.deletePattern(patternId);
+  }
+
   resetForm(form: FormGroup) {
     form.get('name').setValue('');
   }
