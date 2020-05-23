@@ -35,7 +35,7 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
 
       this.chart.padding(0, 0, 0, 0);
 
-      this.chart.zoomOutButton.disabled = true;
+      //this.chart.zoomOutButton.disabled = true;
 
       this.reset();
 
@@ -45,7 +45,7 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
       // dateAxis.dateFormats.setKey("hour", "ss");
       // dateAxis.periodChangeDateFormats.setKey("second", "[bold]h:mm a");
       //dateAxis.dateFormats.setKey("second", "MMMM");
-      dateAxis.dateFormatter.dateFormat = "ss";
+      // dateAxis.dateFormatter.dateFormat = "ss";
       // // dateAxis.periodChangeDateFormats.setKey("minute", "[bold]h:mm a");
       // // dateAxis.periodChangeDateFormats.setKey("hour", "[bold]h:mm a");
       // dateAxis.renderer.inside = true;
@@ -53,16 +53,22 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
       // dateAxis.renderer.ticks.template.disabled = true;
 
       const valueAxis = this.chart.yAxes.push(new am4charts.ValueAxis());
-      valueAxis.tooltip.disabled = true;
+      // valueAxis.tooltip.disabled = true;
       valueAxis.interpolationDuration = 500;
-      valueAxis.rangeChangeDuration = 500;
+      valueAxis.rangeChangeDuration = 5000;
+
       valueAxis.renderer.inside = true;
       valueAxis.renderer.minLabelPosition = 0.05;
       valueAxis.renderer.maxLabelPosition = 0.95;
       valueAxis.renderer.axisFills.template.disabled = true;
       valueAxis.renderer.ticks.template.disabled = true;
+      valueAxis.extraMin = 0.0;
+      valueAxis.extraMax = 0.3;
       valueAxis.min = 0;
-      valueAxis.max = 200;
+      // valueAxis.max = 200;
+
+      this.chart.cursor = new am4charts.XYCursor();
+      this.chart.cursor.xAxis = dateAxis;
 
       const series = this.chart.series.push(new am4charts.LineSeries());
       series.dataFields.dateX = 'label';
@@ -70,6 +76,8 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
       series.interpolationDuration = 500;
       series.defaultState.transitionDuration = 0;
       series.tensionX = 0.8;
+      series.tooltipText = "{valueY}";
+      series.tooltip.pointerOrientation = "vertical";
 
       this.chart.events.on("datavalidated", function () {
         dateAxis.zoom({ start: 1 / 15, end: 1.2 }, false, true);
@@ -98,6 +106,11 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
     gradient.addColor(colors.getIndex(0), 0.2);
     gradient.addColor(colors.getIndex(0), 0);
     series.fill = gradient;
+
+    series.tooltip.getFillFromObject = false;
+    series.tooltip.background.fill = colors.getIndex(0);
+    series.tooltip.opacity = 0.6;
+    series.tooltip.background.opacity = 0.6;
 
     // this makes date axis labels to fade out
     dateAxis.renderer.labels.template.adapter.add("fillOpacity", function (fillOpacity, target) {
