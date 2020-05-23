@@ -20,6 +20,7 @@ export interface IChartData {
 })
 export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
   @Input() data: BehaviorSubject<IChartData[]>;
+  @Input() history: number = 40;
   private chart: am4charts.XYChart;
 
   constructor(private zone: NgZone) { }
@@ -28,33 +29,30 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
     this.zone.runOutsideAngular(() => {
       am4core.useTheme(am4themes_animated);
 
-      const chart = am4core.create("chartdiv", am4charts.XYChart);
+      this.chart = am4core.create("chartdiv", am4charts.XYChart);
 
-      chart.hiddenState.properties.opacity = 0;
+      this.chart.hiddenState.properties.opacity = 0;
 
-      chart.padding(0, 0, 0, 0);
+      this.chart.padding(0, 0, 0, 0);
 
-      chart.zoomOutButton.disabled = true;
+      this.chart.zoomOutButton.disabled = true;
 
-      // for (i = 0; i <= 30; i++) {
-      //   visits -= Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-      //   data.push({ date: new Date().setSeconds(i - 30), value: visits });
-      // }
+      this.reset();
 
-      chart.data = [];
-
-      const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
-      dateAxis.renderer.grid.template.location = 0;
-      dateAxis.renderer.minGridDistance = 30;
-      // dateAxis.dateFormats.setKey("second", "ss");
+      const dateAxis = this.chart.xAxes.push(new am4charts.DateAxis());
+      // dateAxis.renderer.grid.template.location = 0;
+      // dateAxis.renderer.minGridDistance = 30;
+      // dateAxis.dateFormats.setKey("hour", "ss");
       // dateAxis.periodChangeDateFormats.setKey("second", "[bold]h:mm a");
-      // dateAxis.periodChangeDateFormats.setKey("minute", "[bold]h:mm a");
-      // dateAxis.periodChangeDateFormats.setKey("hour", "[bold]h:mm a");
-      dateAxis.renderer.inside = true;
-      dateAxis.renderer.axisFills.template.disabled = true;
-      dateAxis.renderer.ticks.template.disabled = true;
+      //dateAxis.dateFormats.setKey("second", "MMMM");
+      dateAxis.dateFormatter.dateFormat = "ss";
+      // // dateAxis.periodChangeDateFormats.setKey("minute", "[bold]h:mm a");
+      // // dateAxis.periodChangeDateFormats.setKey("hour", "[bold]h:mm a");
+      // dateAxis.renderer.inside = true;
+      // dateAxis.renderer.axisFills.template.disabled = true;
+      // dateAxis.renderer.ticks.template.disabled = true;
 
-      const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+      const valueAxis = this.chart.yAxes.push(new am4charts.ValueAxis());
       valueAxis.tooltip.disabled = true;
       valueAxis.interpolationDuration = 500;
       valueAxis.rangeChangeDuration = 500;
@@ -63,29 +61,31 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
       valueAxis.renderer.maxLabelPosition = 0.95;
       valueAxis.renderer.axisFills.template.disabled = true;
       valueAxis.renderer.ticks.template.disabled = true;
+      valueAxis.min = 0;
+      valueAxis.max = 200;
 
-      const series = chart.series.push(new am4charts.LineSeries());
+      const series = this.chart.series.push(new am4charts.LineSeries());
       series.dataFields.dateX = 'label';
       series.dataFields.valueY = 'value';
       series.interpolationDuration = 500;
       series.defaultState.transitionDuration = 0;
       series.tensionX = 0.8;
 
-      chart.events.on("datavalidated", function () {
+      this.chart.events.on("datavalidated", function () {
         dateAxis.zoom({ start: 1 / 15, end: 1.2 }, false, true);
       });
 
       dateAxis.interpolationDuration = 500;
       dateAxis.rangeChangeDuration = 500;
 
-      LineChartComponent.setupEffects(series, chart.colors, dateAxis);
+      LineChartComponent.setupEffects(series, this.chart.colors, dateAxis);
 
       this.data.subscribe(data => {
-        let length = (chart.data.length + data.length) - 40;
+        let length = (this.chart.data.length + data.length) - this.history;
 
         if (length < 0) length = 0;
 
-        chart.addData(data, length);
+        this.chart.addData(data, length);
       });
     });
   }
@@ -104,6 +104,9 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
       var dataItem = target.dataItem;
       return dataItem.position;
     })
+    dateAxis.renderer.labels.template.adapter.add("textOutput", (value, target: any) => {
+      return `${target.dataItem.value}`;
+    });
 
     // need to set this, otherwise fillOpacity is not changed and not set
     dateAxis.events.on("validated", function () {
@@ -111,21 +114,6 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
         label.fillOpacity = label.fillOpacity;
       })
     })
-
-    // this makes date axis labels which are at equal minutes to be rotated
-    // dateAxis.renderer.labels.template.adapter.add("rotation", (rotation, target: any) => {
-    //   const dataItem = target.dataItem;
-    //   if (dataItem.date && dataItem.date.getTime() == am4core.time.round(new Date(dataItem.date.getTime()), "minute", 0).getTime()) {
-    //     target.verticalCenter = "middle";
-    //     target.horizontalCenter = "left";
-    //     return -90;
-    //   }
-    //   else {
-    //     target.verticalCenter = "bottom";
-    //     target.horizontalCenter = "middle";
-    //     return 0;
-    //   }
-    // })
 
     // bullet at the front of the line
     var bullet = series.createChild(am4charts.CircleBullet);
@@ -154,6 +142,15 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   reset() {
+    const data = [];
 
+    for (let index = 0; index < this.history; index++) {
+      data.push({
+        label: -(this.history - index),
+        value: 0
+      });
+    }
+
+    this.chart.data = data;
   }
 }
