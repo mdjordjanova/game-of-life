@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Grid } from 'src/app/shared/models/grid.model';
 import { BehaviorSubject, timer, Subscription, Observable } from 'rxjs';
 import { GameOfLifeEngine } from 'src/app/shared/engines/game-of-life.engine';
@@ -8,10 +8,10 @@ import { clearPattern } from 'src/app/shared/data/patterns/clear';
 import { ModalService } from 'src/app/shared/services/modal.service';
 import { LocalStorage } from 'src/app/shared/utilities/object-storage';
 import { translateToPattern } from 'src/app/shared/utilities/translate-to-pattern.utitlity';
-import { LineChartSetup } from 'src/app/shared/models/chart.model';
 import { patterns } from 'src/app/shared/data/constants/patterns';
 import { Pattern } from 'src/app/shared/models/pattern.model';
 import { PatternService } from 'src/app/shared/services/pattern.service';
+import { LineChartComponent } from 'src/app/shared/components/line-chart/line-chart.component';
 
 @Component({
   selector: 'app-simulation',
@@ -23,6 +23,8 @@ export class SimulationComponent {
   time = new BehaviorSubject(0);
   timeSub = new Subscription(null);
   running = false;
+  chartData: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  @ViewChild('lineChart') lineChart: LineChartComponent;
 
   selectForm = this.formBuilder.group({ pattern: [new Pattern('', null)] });
   pattern = new Pattern('Gilder Gun', gliderGunPattern);
@@ -33,10 +35,6 @@ export class SimulationComponent {
     description: ['']
   });
 
-  active = [];
-  activeLabels = [];
-  activeLineChartSetup = new LineChartSetup([{data: [], label: 'active cells'}], [], null);
-
   constructor(
     private engine: GameOfLifeEngine,
     private formBuilder: FormBuilder,
@@ -44,7 +42,6 @@ export class SimulationComponent {
     private patternService: PatternService) {
     this.grid.next(new Grid({ rows: 30, cols: 60 }, this.pattern.config));
     this.patterns$ = this.patternService.getPatterns();
-    this.drawCharts();
   }
 
   start() {
@@ -68,7 +65,7 @@ export class SimulationComponent {
     this.time.next(0);
     this.grid.next(new Grid({ rows: 30, cols: 60 }, this.pattern.config));
 
-    this.resetCharts();
+    this.lineChart.reset();
   }
 
   clear() {
@@ -76,8 +73,6 @@ export class SimulationComponent {
 
     this.time.next(0);
     this.grid.next(new Grid({ rows: 30, cols: 60 }, clearPattern));
-
-    this.resetCharts();
   }
 
   step() {
@@ -118,24 +113,9 @@ export class SimulationComponent {
   }
 
   collectData() {
-    if (this.active.length > 40 && this.activeLabels.length > 40) {
-      this.active.shift();
-      this.activeLabels.shift();
-    }
-
-    this.active.push(this.grid.value.getCells('active').length);
-    this.activeLabels.push(this.time.value);
-  }
-
-  drawCharts() {
-    this.activeLineChartSetup = new LineChartSetup([{data: this.active, label: 'active cells'}], this.activeLabels);
-  }
-
-  resetCharts() {
-    this.active = [];
-    this.activeLabels = [];
-    this.activeLineChartSetup = new LineChartSetup([{data: [], label: 'active cells'}], []);
-
-    this.drawCharts();
+    this.chartData.next([{
+      value: this.grid.value.getCells('active').length,
+      label: this.time.value
+    }]);
   }
 }

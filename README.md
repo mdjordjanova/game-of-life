@@ -15,4 +15,4 @@ Thus,
 * All other live cells die in the next generation. Similarly, all other dead cells stay dead.
 
 ## Resources
-* [Chart.js Plugins.](https://github.com/chartjs/awesome/)
+* [JavaScript Charts & Maps](https://www.amcharts.com/demos/live-data/)

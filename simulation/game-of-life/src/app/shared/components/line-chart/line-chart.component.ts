@@ -1,23 +1,23 @@
 import { Component, Input } from '@angular/core';
-import { LineChartSetup } from '../../models/chart.model';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-line-chart',
   styleUrls: ['./line-chart.component.scss'],
   template: `
-    <div>
-      <canvas baseChart
-        [datasets]="setup.data"
-        [labels]="setup.labels"
-        [options]="setup.options"
-        [colors]="setup.colors"
-        [legend]="setup.legend"
-        [chartType]="setup.type"
-        [plugins]="setup.plugins">
-      </canvas>
-    </div>
+    <div></div>
   `
 })
 export class LineChartComponent {
-  @Input() setup: LineChartSetup;
+  @Input() data: BehaviorSubject<any[]>;
+
+  ngOnInit() {
+    this.data.subscribe(data => {
+      console.log(data);
+    });
+  }
+
+  reset() {
+
+  }
 }

@@ -18,11 +18,11 @@
           </form>
         </div>
       </div>
-    
+
       <div class="grid-container">
         <app-grid [grid$]="grid"></app-grid>
       </div>
-    
+
       <div class="buttons-container">
         <button [disabled]="running" (click)="start();">Start</button>
         <button [disabled]="!running" (click)="stop()">Stop</button>
@@ -34,7 +34,7 @@
 
     <div class="charts-container">
       <div class="charts">
-        <app-line-chart [setup]="activeLineChartSetup"></app-line-chart>
+        <app-line-chart #lineChart [data]="chartData"></app-line-chart>
       </div>
     </div>
   </div>
