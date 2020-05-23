@@ -28,7 +28,7 @@ export class SimulationComponent {
 
   selectForm = this.formBuilder.group({ pattern: [new Pattern('', null)] });
   pattern = new Pattern('Gilder Gun', gliderGunPattern);
-  patterns$: Observable<Pattern[]>
+  patterns$: Observable<Pattern[]>;
 
   saveForm = this.formBuilder.group({
     name: ['', Validators.required],

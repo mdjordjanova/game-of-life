@@ -15,7 +15,7 @@ export class PatternService {
           id: e.payload.doc.id,
           name: (e.payload.doc.data() as Pattern).name,
           config: (e.payload.doc.data() as Pattern).config
-        }
+        };
       }))
     );
   }
@@ -31,5 +31,5 @@ export class PatternService {
 
   deletePattern(patternId: string){
     this.firestore.doc('patterns/' + patternId).delete();
-}
+  }
 }
