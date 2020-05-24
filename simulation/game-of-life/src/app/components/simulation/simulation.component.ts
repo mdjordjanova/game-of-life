@@ -24,7 +24,8 @@ export class SimulationComponent {
   time = new BehaviorSubject(0);
   timeSub = new Subscription(null);
   running = false;
-  chartData: BehaviorSubject<IChartData[]> = new BehaviorSubject<IChartData[]>([]);
+  chartAliveData$: BehaviorSubject<IChartData[]> = new BehaviorSubject<IChartData[]>([]);
+  chartCycleData$: BehaviorSubject<IChartData[]> = new BehaviorSubject<IChartData[]>([]);
   @ViewChild('lineChartAlive') lineChartAlive: LineChartComponent;
   @ViewChild('lineChartCycle') lineChartCycle: LineChartComponent;
 
@@ -127,12 +128,18 @@ export class SimulationComponent {
   }
 
   collectData(status: IStats) {
-    this.chartData.next([{
-      // live: +this.grid.value.getCells('active').length,
-      live: 0,//status.live,
+    this.chartAliveData$.next([{
+      time: this.time.value,
+      live: +status.live,
       born: +status.born,
       died: -status.died,
-      time: this.time.value
+    }]);
+
+    this.chartCycleData$.next([{
+      time: this.time.value,
+      live: +status.live,
+      born: +status.born,
+      died: -status.died,
     }]);
   }
 }

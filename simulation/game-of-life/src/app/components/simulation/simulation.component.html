@@ -39,8 +39,12 @@
 
     <div class="charts-container">
       <div class="charts">
-        <app-line-chart #lineChartAlive [data]="chartData"></app-line-chart>
-        <app-line-chart #lineChartCycle [data]="chartData"></app-line-chart>
+        <div class="chart-border">
+          <app-line-chart #lineChartAlive [data]="chartAliveData$" [live]="true"></app-line-chart>
+        </div>
+        <div class="chart-border">
+          <app-line-chart #lineChartCycle [data]="chartCycleData$" [born]="true" [died]="true"></app-line-chart>
+        </div>
       </div>
     </div>
   </div>

@@ -1,4 +1,4 @@
-@import './../../../assets/scss/variables.scss';
+@import "./../../../assets/scss/variables.scss";
 
 .menu-container {
   display: flex;
@@ -97,4 +97,13 @@ button {
   .charts {
     width: 100%;
   }
+}
+
+.chart-border {
+  border: 1.5px;
+  border-style: solid;
+  border-color: #e6e4e2;
+  padding: 20px 10px 10px 10px;
+  margin: 10px;
+  border-radius: 6px;
 }

@@ -1,4 +1,4 @@
-import { Component, NgZone, Input, AfterViewInit, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, NgZone, Input, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
@@ -20,11 +20,24 @@ export interface IChartData {
     <div #chartDiv class="chart" id="chartdiv"></div>
   `
 })
-export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
+export class LineChartComponent implements AfterViewInit, OnDestroy {
   @Input() data: BehaviorSubject<IChartData[]>;
   @Input() history: number = 40;
+  @Input() live: boolean = false;
+  @Input() died: boolean = false;
+  @Input() born: boolean = false;
+  @Input() fontSize: number = 11;
+
   private chart: am4charts.XYChart;
   @ViewChild('chartDiv') chartDiv: ElementRef<HTMLCanvasElement>;
+
+  get zoomOutButton(): boolean {
+    return !this.chart.zoomOutButton.disabled;
+  }
+
+  set zoomOutButton(value: boolean) {
+    this.chart.zoomOutButton.disabled = !value;
+  }
 
   constructor(private zone: NgZone) { }
 
@@ -33,32 +46,33 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
       am4core.useTheme(am4themes_animated);
 
       this.chart = am4core.create(this.chartDiv.nativeElement, am4charts.XYChart);
-
       this.chart.hiddenState.properties.opacity = 0;
-
       this.chart.padding(0, 0, 0, 0);
+      this.chart.zoomOutButton.disabled = false;
+      this.chart.fontSize = this.fontSize;
 
-      //this.chart.zoomOutButton.disabled = true;
+      this.chart.zoomOutButton.fontSize = this.fontSize;
+      this.chart.zoomOutButton.marginRight = -50;
+
+      this.chart.legend = new am4charts.Legend();
+      this.chart.legend.useDefaultMarker = true;
+      this.chart.legend.position = 'right';
+
+      const marker = this.chart.legend.markers.template.children.getIndex(0);
+      (marker as any).cornerRadius(12, 12, 12, 12);
+      marker.strokeWidth = 2;
+      marker.strokeOpacity = 1;
+      marker.stroke = am4core.color("#ccc");
 
       this.reset();
 
       const dateAxis = this.chart.xAxes.push(new am4charts.DateAxis());
-      // dateAxis.renderer.grid.template.location = 0;
-      // dateAxis.renderer.minGridDistance = 30;
-      // dateAxis.dateFormats.setKey("hour", "ss");
-      // dateAxis.periodChangeDateFormats.setKey("second", "[bold]h:mm a");
-      //dateAxis.dateFormats.setKey("second", "MMMM");
-      // dateAxis.dateFormatter.dateFormat = "ss";
-      // // dateAxis.periodChangeDateFormats.setKey("minute", "[bold]h:mm a");
-      // // dateAxis.periodChangeDateFormats.setKey("hour", "[bold]h:mm a");
-      // dateAxis.renderer.inside = true;
-      // dateAxis.renderer.axisFills.template.disabled = true;
-      // dateAxis.renderer.ticks.template.disabled = true;
+      dateAxis.tooltip.fontSize = this.fontSize;
 
       const valueAxis = this.chart.yAxes.push(new am4charts.ValueAxis());
-      // valueAxis.tooltip.disabled = true;
       valueAxis.interpolationDuration = 500;
       valueAxis.rangeChangeDuration = 5000;
+      valueAxis.tooltip.fontSize = this.fontSize;
 
       valueAxis.renderer.inside = true;
       valueAxis.renderer.minLabelPosition = 0.05;
@@ -74,28 +88,36 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
       this.chart.cursor = new am4charts.XYCursor();
       this.chart.cursor.xAxis = dateAxis;
 
-      const seriesLive = this.chart.series.push(new am4charts.LineSeries());
-      seriesLive.dataFields.dateX = 'time';
-      seriesLive.dataFields.valueY = 'live';
+      if (this.live) {
+        const series = this.chart.series.push(new am4charts.LineSeries());
+        series.name = 'Alive';
+        series.dataFields.dateX = 'time';
+        series.dataFields.valueY = 'live';
+        LineChartComponent.seriesStyle(series, this.fontSize, this.chart.colors.getIndex(0));
+      }
 
-      const seriesDied = this.chart.series.push(new am4charts.LineSeries());
-      seriesDied.dataFields.dateX = 'time';
-      seriesDied.dataFields.valueY = 'died';
+      if (this.died) {
+        const series = this.chart.series.push(new am4charts.LineSeries());
+        series.name = 'Died';
+        series.dataFields.dateX = 'time';
+        series.dataFields.valueY = 'died';
+        LineChartComponent.seriesStyle(series, this.fontSize, this.chart.colors.getIndex(8));
+      }
 
-      const seriesBorn = this.chart.series.push(new am4charts.LineSeries());
-      seriesBorn.dataFields.dateX = 'time';
-      seriesBorn.dataFields.valueY = 'born';
+      if (this.born) {
+        const series = this.chart.series.push(new am4charts.LineSeries());
+        series.name = 'Born';
+        series.dataFields.dateX = 'time';
+        series.dataFields.valueY = 'born';
+        LineChartComponent.seriesStyle(series, this.fontSize, this.chart.colors.getIndex(18));
+      }
 
       this.chart.events.on("datavalidated", function () {
-        dateAxis.zoom({ start: 1 / 15, end: 1.2 }, false, true);
+        dateAxis.zoom({ start: 1 / 10, end: 1.1 }, false, true);
       });
 
       dateAxis.interpolationDuration = 500;
       dateAxis.rangeChangeDuration = 500;
-
-      LineChartComponent.seriesStyle(seriesBorn, this.chart.colors.getIndex(0));
-      LineChartComponent.seriesStyle(seriesDied, this.chart.colors.getIndex(9));
-      // LineChartComponent.seriesStyle(seriesDied, this.chart.colors.getIndex(9));
 
       LineChartComponent.axisStyle(dateAxis);
 
@@ -109,13 +131,13 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
     });
   }
 
-  private static seriesStyle(series: am4charts.LineSeries, color: am4core.Color) {
+  private static seriesStyle(series: am4charts.LineSeries, fontSize: number, color: am4core.Color) {
     series.interpolationDuration = 500;
     series.defaultState.transitionDuration = 0;
     series.tensionX = 0.8;
     series.tooltipText = "{valueY}";
     series.tooltip.pointerOrientation = "vertical";
-
+    series.tooltip.fontSize = fontSize;
     series.stroke = color;
 
     // all the below is optional, makes some fancy effects
@@ -163,9 +185,6 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
         label.fillOpacity = label.fillOpacity;
       })
     })
-  }
-
-  ngOnInit() {
   }
 
   ngOnDestroy() {
