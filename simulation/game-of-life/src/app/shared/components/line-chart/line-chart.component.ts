@@ -79,8 +79,8 @@ export class LineChartComponent implements AfterViewInit, OnDestroy {
       valueAxis.renderer.maxLabelPosition = 0.95;
       valueAxis.renderer.axisFills.template.disabled = true;
       valueAxis.renderer.ticks.template.disabled = true;
-      valueAxis.extraMin = 0.2;
-      valueAxis.extraMax = 0.2;
+      valueAxis.extraMin = 0.1;
+      valueAxis.extraMax = 0.1;
 
       // valueAxis.min = -100;
       // valueAxis.max = +100;
