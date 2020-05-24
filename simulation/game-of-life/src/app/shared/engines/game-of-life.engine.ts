@@ -4,10 +4,21 @@ import { Grid } from '../models/grid.model';
 import { Cell } from '../models/cell.model';
 import { clone } from '../utilities/clone.utility';
 
+export interface IStats {
+  live: number;
+  born: number;
+  died: number;
+}
+
 @Injectable()
 export class GameOfLifeEngine {
 
   run(grid$: BehaviorSubject<Grid>) {
+    const stats: IStats = {
+      live: 0,
+      born: 0,
+      died: 0
+    };
 
     const grid = clone(grid$.value) as Grid;
     const updatedGrid = grid$.value;
@@ -15,23 +26,32 @@ export class GameOfLifeEngine {
     for (let i = 0; i < grid.cells.length; i++) {
       for (let j = 0; j < grid.cells[i].length; j++) {
         const activeNeighbours = this.getActiveNeighbours(grid.cells[i][j], grid).length;
+        const updatedCell = updatedGrid.cells[i][j];
 
         if (grid.cells[i][j].active) {
 
           if (activeNeighbours !== 2 && activeNeighbours !== 3) {
+            if (updatedCell.active) stats.died++;
+
             updatedGrid.cells[i][j].active = false;
           }
 
         } else {
 
           if (activeNeighbours === 3) {
-            updatedGrid.cells[i][j].active = true;
+            if (!updatedCell.active) stats.born++;
+
+            updatedCell.active = true;
           }
         }
+
+        if (updatedCell.active) stats.live++;
       }
     }
 
     grid$.next(updatedGrid);
+
+    return stats;
   }
 
   private getNeighbours(cell: Cell, grid: Grid): Cell[] {

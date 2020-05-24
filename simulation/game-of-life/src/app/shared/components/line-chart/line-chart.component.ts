@@ -1,4 +1,4 @@
-import { Component, NgZone, Input, AfterViewInit, OnInit, OnDestroy } from '@angular/core';
+import { Component, NgZone, Input, AfterViewInit, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
@@ -7,21 +7,24 @@ import am4themes_animated from "@amcharts/amcharts4/themes/animated";
 am4core.useTheme(am4themes_animated);
 
 export interface IChartData {
-  label: number;
-  value: number;
+  time: number;
+  live: number;
+  born: number;
+  died: number;
 }
 
 @Component({
   selector: 'app-line-chart',
   styleUrls: ['./line-chart.component.scss'],
   template: `
-    <div class="chart" id="chartdiv"></div>
+    <div #chartDiv class="chart" id="chartdiv"></div>
   `
 })
 export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
   @Input() data: BehaviorSubject<IChartData[]>;
   @Input() history: number = 40;
   private chart: am4charts.XYChart;
+  @ViewChild('chartDiv') chartDiv: ElementRef<HTMLCanvasElement>;
 
   constructor(private zone: NgZone) { }
 
@@ -29,7 +32,7 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
     this.zone.runOutsideAngular(() => {
       am4core.useTheme(am4themes_animated);
 
-      this.chart = am4core.create("chartdiv", am4charts.XYChart);
+      this.chart = am4core.create(this.chartDiv.nativeElement, am4charts.XYChart);
 
       this.chart.hiddenState.properties.opacity = 0;
 
@@ -62,22 +65,26 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
       valueAxis.renderer.maxLabelPosition = 0.95;
       valueAxis.renderer.axisFills.template.disabled = true;
       valueAxis.renderer.ticks.template.disabled = true;
-      valueAxis.extraMin = 0.0;
-      valueAxis.extraMax = 0.3;
-      valueAxis.min = 0;
-      // valueAxis.max = 200;
+      valueAxis.extraMin = 0.2;
+      valueAxis.extraMax = 0.2;
+
+      // valueAxis.min = -100;
+      // valueAxis.max = +100;
 
       this.chart.cursor = new am4charts.XYCursor();
       this.chart.cursor.xAxis = dateAxis;
 
-      const series = this.chart.series.push(new am4charts.LineSeries());
-      series.dataFields.dateX = 'label';
-      series.dataFields.valueY = 'value';
-      series.interpolationDuration = 500;
-      series.defaultState.transitionDuration = 0;
-      series.tensionX = 0.8;
-      series.tooltipText = "{valueY}";
-      series.tooltip.pointerOrientation = "vertical";
+      const seriesLive = this.chart.series.push(new am4charts.LineSeries());
+      seriesLive.dataFields.dateX = 'time';
+      seriesLive.dataFields.valueY = 'live';
+
+      const seriesDied = this.chart.series.push(new am4charts.LineSeries());
+      seriesDied.dataFields.dateX = 'time';
+      seriesDied.dataFields.valueY = 'died';
+
+      const seriesBorn = this.chart.series.push(new am4charts.LineSeries());
+      seriesBorn.dataFields.dateX = 'time';
+      seriesBorn.dataFields.valueY = 'born';
 
       this.chart.events.on("datavalidated", function () {
         dateAxis.zoom({ start: 1 / 15, end: 1.2 }, false, true);
@@ -86,7 +93,11 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
       dateAxis.interpolationDuration = 500;
       dateAxis.rangeChangeDuration = 500;
 
-      LineChartComponent.setupEffects(series, this.chart.colors, dateAxis);
+      LineChartComponent.seriesStyle(seriesBorn, this.chart.colors.getIndex(0));
+      LineChartComponent.seriesStyle(seriesDied, this.chart.colors.getIndex(9));
+      // LineChartComponent.seriesStyle(seriesDied, this.chart.colors.getIndex(9));
+
+      LineChartComponent.axisStyle(dateAxis);
 
       this.data.subscribe(data => {
         let length = (this.chart.data.length + data.length) - this.history;
@@ -98,19 +109,44 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
     });
   }
 
-  private static setupEffects(series: am4charts.LineSeries, colors: am4core.ColorSet, dateAxis: am4charts.DateAxis<am4charts.AxisRenderer>) {
+  private static seriesStyle(series: am4charts.LineSeries, color: am4core.Color) {
+    series.interpolationDuration = 500;
+    series.defaultState.transitionDuration = 0;
+    series.tensionX = 0.8;
+    series.tooltipText = "{valueY}";
+    series.tooltip.pointerOrientation = "vertical";
+
+    series.stroke = color;
+
     // all the below is optional, makes some fancy effects
     // gradient fill of the series
     series.fillOpacity = 1;
-    var gradient = new am4core.LinearGradient();
-    gradient.addColor(colors.getIndex(0), 0.2);
-    gradient.addColor(colors.getIndex(0), 0);
+    const gradient = new am4core.LinearGradient();
+    gradient.addColor(color, 0.2);
+    gradient.addColor(color, 0);
     series.fill = gradient;
 
     series.tooltip.getFillFromObject = false;
-    series.tooltip.background.fill = colors.getIndex(0);
+    series.tooltip.background.fill = color;
     series.tooltip.opacity = 0.6;
     series.tooltip.background.opacity = 0.6;
+
+    // bullet at the front of the line
+    var bullet = series.createChild(am4charts.CircleBullet);
+    bullet.circle.radius = 5;
+    bullet.fillOpacity = 1;
+    bullet.fill = color;
+    bullet.isMeasured = false;
+
+    series.events.on("validated", function () {
+      if (series.dataItems.last) {
+        bullet.moveTo(series.dataItems.last.point);
+        bullet.validatePosition();
+      }
+    });
+  }
+
+  private static axisStyle(dateAxis: am4charts.DateAxis<am4charts.AxisRenderer>) {
 
     // this makes date axis labels to fade out
     dateAxis.renderer.labels.template.adapter.add("fillOpacity", function (fillOpacity, target) {
@@ -127,20 +163,6 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
         label.fillOpacity = label.fillOpacity;
       })
     })
-
-    // bullet at the front of the line
-    var bullet = series.createChild(am4charts.CircleBullet);
-    bullet.circle.radius = 5;
-    bullet.fillOpacity = 1;
-    bullet.fill = colors.getIndex(0);
-    bullet.isMeasured = false;
-
-    series.events.on("validated", function () {
-      if (series.dataItems.last) {
-        bullet.moveTo(series.dataItems.last.point);
-        bullet.validatePosition();
-      }
-    });
   }
 
   ngOnInit() {
@@ -155,12 +177,14 @@ export class LineChartComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   reset() {
-    const data = [];
+    const data: IChartData[] = [];
 
     for (let index = 0; index < this.history; index++) {
       data.push({
-        label: -(this.history - index),
-        value: 0
+        time: -(this.history - index),
+        live: 0,
+        born: 0,
+        died: 0
       });
     }
 

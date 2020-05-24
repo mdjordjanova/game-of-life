@@ -7,10 +7,10 @@
         <div class="time-container">
           Time: {{time | async | time}}
         </div>
-        <div class="select-container" *ngIf="patterns$ | async as patterns">
+        <div class="select-container">
           <button (click)="openModal('save-pattern')">Save</button>
           <form [formGroup]="selectForm">
-            <select (change)="onChange($event, patterns)">
+            <select (change)="onChange($event)" (mousedown)="onPatternClick()">
               <ng-container>
                 <option *ngFor="let pattern of patterns; let i = index" [value]="i">{{pattern.name}}</option>
               </ng-container>
@@ -39,7 +39,8 @@
 
     <div class="charts-container">
       <div class="charts">
-        <app-line-chart #lineChart [data]="chartData"></app-line-chart>
+        <app-line-chart #lineChartAlive [data]="chartData"></app-line-chart>
+        <app-line-chart #lineChartCycle [data]="chartData"></app-line-chart>
       </div>
     </div>
   </div>
