@@ -1,7 +1,5 @@
 # Game Of Life
 
-[![Watch the animation](https://firebasestorage.googleapis.com/v0/b/lexi-tst.appspot.com/o/dynamic-chart.png?alt=media)](https://firebasestorage.googleapis.com/v0/b/lexi-tst.appspot.com/o/dynamic-chart.gif?alt=media)
-
 ## Rules
 Game of Life is an infinite, two-dimensional grid of square cells, each of which is in one of two possible states, alive or dead, (or populated and unpopulated). Every cell interacts with its eight neighbours. At each step in time, the following transitions occur:
 * Any live cell with fewer than two live neighbours dies, because of underpopulation.
@@ -15,4 +13,4 @@ Thus,
 * All other live cells die in the next generation. Similarly, all other dead cells stay dead.
 
 ## Resources
-* [Chart.js Plugins.](https://github.com/chartjs/awesome/)
+* [JavaScript Charts & Maps](https://www.amcharts.com/demos)

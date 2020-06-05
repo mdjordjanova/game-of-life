@@ -1,17 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Grid } from 'src/app/shared/models/grid.model';
-import { BehaviorSubject, timer, Subscription, Observable } from 'rxjs';
-import { GameOfLifeEngine } from 'src/app/shared/engines/game-of-life.engine';
+import { BehaviorSubject, timer, Subscription, Observable, of } from 'rxjs';
+import { GameOfLifeEngine, IStats } from 'src/app/shared/engines/game-of-life.engine';
 import { gliderGunPattern } from 'src/app/shared/data/patterns/glider-gun';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { clearPattern } from 'src/app/shared/data/patterns/clear';
 import { ModalService } from 'src/app/shared/services/modal.service';
 import { LocalStorage } from 'src/app/shared/utilities/object-storage';
 import { translateToPattern } from 'src/app/shared/utilities/translate-to-pattern.utitlity';
-import { LineChartSetup } from 'src/app/shared/models/chart.model';
 import { patterns } from 'src/app/shared/data/constants/patterns';
 import { Pattern } from 'src/app/shared/models/pattern.model';
 import { PatternService } from 'src/app/shared/services/pattern.service';
+import { LineChartComponent, IChartData } from 'src/app/shared/components/line-chart/line-chart.component';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-simulation',
@@ -23,19 +24,21 @@ export class SimulationComponent {
   time = new BehaviorSubject(0);
   timeSub = new Subscription(null);
   running = false;
+  chartAliveData$: BehaviorSubject<IChartData[]> = new BehaviorSubject<IChartData[]>([]);
+  chartCycleData$: BehaviorSubject<IChartData[]> = new BehaviorSubject<IChartData[]>([]);
+  @ViewChild('lineChartAlive') lineChartAlive: LineChartComponent;
+  @ViewChild('lineChartCycle') lineChartCycle: LineChartComponent;
+
+  // Cicle
 
   selectForm = this.formBuilder.group({ pattern: [new Pattern('', null)] });
   pattern = new Pattern('Gilder Gun', gliderGunPattern);
-  patterns$: Observable<Pattern[]>;
+  patterns: Pattern[];
 
   saveForm = this.formBuilder.group({
     name: ['', Validators.required],
     description: ['']
   });
-
-  active = [];
-  activeLabels = [];
-  activeLineChartSetup = new LineChartSetup([{data: [], label: 'active cells'}], [], null);
 
   constructor(
     private engine: GameOfLifeEngine,
@@ -43,8 +46,8 @@ export class SimulationComponent {
     private modalService: ModalService,
     private patternService: PatternService) {
     this.grid.next(new Grid({ rows: 30, cols: 60 }, this.pattern.config));
-    this.patterns$ = this.patternService.getPatterns();
-    this.drawCharts();
+
+    this.patterns = null;
   }
 
   start() {
@@ -68,7 +71,8 @@ export class SimulationComponent {
     this.time.next(0);
     this.grid.next(new Grid({ rows: 30, cols: 60 }, this.pattern.config));
 
-    this.resetCharts();
+    this.lineChartAlive.reset();
+    this.lineChartCycle.reset();
   }
 
   clear() {
@@ -77,18 +81,24 @@ export class SimulationComponent {
     this.time.next(0);
     this.grid.next(new Grid({ rows: 30, cols: 60 }, clearPattern));
 
-    this.resetCharts();
+    this.lineChartAlive.reset();
+    this.lineChartCycle.reset();
   }
 
   step() {
     this.time.next(this.time.value + 1);
-    this.engine.run(this.grid);
-    this.collectData();
+    const status = this.engine.run(this.grid);
+    this.collectData(status);
   }
 
-  onChange(event: any, patterns: any) {
-    this.pattern = patterns[event.target.value];
+  onChange(event: any) {
+    this.pattern = this.patterns[event.target.value];
     this.reset();
+  }
+  async onPatternClick() {
+    if (this.patterns === null) {
+      this.patterns = await this.patternService.getPatterns().pipe(take(1)).toPromise();
+    }
   }
 
   openModal(id: string) {
@@ -117,25 +127,19 @@ export class SimulationComponent {
     form.get('name').setValue('');
   }
 
-  collectData() {
-    if (this.active.length > 40 && this.activeLabels.length > 40) {
-      this.active.shift();
-      this.activeLabels.shift();
-    }
+  collectData(status: IStats) {
+    this.chartAliveData$.next([{
+      time: this.time.value,
+      live: +status.live,
+      born: +status.born,
+      died: -status.died,
+    }]);
 
-    this.active.push(this.grid.value.getCells('active').length);
-    this.activeLabels.push(this.time.value);
-  }
-
-  drawCharts() {
-    this.activeLineChartSetup = new LineChartSetup([{data: this.active, label: 'active cells'}], this.activeLabels);
-  }
-
-  resetCharts() {
-    this.active = [];
-    this.activeLabels = [];
-    this.activeLineChartSetup = new LineChartSetup([{data: [], label: 'active cells'}], []);
-
-    this.drawCharts();
+    this.chartCycleData$.next([{
+      time: this.time.value,
+      live: +status.live,
+      born: +status.born,
+      died: -status.died,
+    }]);
   }
 }
