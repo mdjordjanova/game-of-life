@@ -6,10 +6,6 @@ import { GridComponent } from './grid/grid.component';
 import { RouterModule } from '@angular/router';
 import { ModalComponent } from './modal/modal.component';
 import { LineChartComponent } from './line-chart/line-chart.component';
-import { SlidePanelComponent } from './slide-panel/slide-panel.component';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SlideButtonComponent } from './slide-button/slide-button';
 
 @NgModule({
   declarations: [
@@ -17,18 +13,14 @@ import { SlideButtonComponent } from './slide-button/slide-button';
     GridComponent,
     HeaderComponent,
     LineChartComponent,
-    ModalComponent,
-    SlideButtonComponent,
-    SlidePanelComponent
+    ModalComponent
   ],
   exports: [
     ContentComponent,
     GridComponent,
     HeaderComponent,
     LineChartComponent,
-    ModalComponent,
-    SlideButtonComponent,
-    SlidePanelComponent
+    ModalComponent
   ],
   imports: [
     CommonModule,
