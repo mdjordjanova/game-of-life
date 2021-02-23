@@ -1,10 +1,6 @@
 {
   "name": "game-of-life",
-<<<<<<< HEAD
-  "version": "1.0.0",
-=======
   "version": "1.0.1",
->>>>>>> dev
   "scripts": {
     "start": "launch"
   },
