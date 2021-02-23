@@ -1,0 +1,15 @@
+{
+  "menu": {
+    "description": "action",
+    "serve:Builds and serves your app, rebuilding on file changes.": {
+      "description": "environment",
+      "dev:Builds and serves your app for the development environment.": "serve:dev",
+      "prd:Builds and serves your app for the production environment.": "serve:prd"
+    },
+    "build:Compiles your app into an output directory.": {
+      "description": "environment",
+      "dev:Builds your app for the development environment.": "build:dev",
+      "prd:Builds your app for the production environment.": "build:prd"
+    }
+  }
+}

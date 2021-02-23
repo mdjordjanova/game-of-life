@@ -1,18 +1,10 @@
+import { IEnvironment } from "./environment.model";
+
 // This file can be replaced during build by using the `fileReplacements` array.
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
-  production: false,
-  firebaseConfig : {
-    apiKey: 'AIzaSyCYZ3UXyf8E9kmfeJmuUMDI1VGln1C9Q0g',
-    authDomain: 'game-of-life-3f821.firebaseapp.com',
-    databaseURL: 'https://game-of-life-3f821.firebaseio.com',
-    projectId: 'game-of-life-3f821',
-    storageBucket: 'game-of-life-3f821.appspot.com',
-    messagingSenderId: '1036308293289'
-  }
-};
+export const environment = {} as IEnvironment;
 
 /*
  * For easier debugging in development mode, you can import the following file
