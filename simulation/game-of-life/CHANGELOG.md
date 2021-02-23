@@ -1,3 +1,9 @@
+## Version 1.0.1
+
+Script launchher added:
+- serve: development and production environment
+- build: development and production environment
+
 ## Version 1.0.0
 
 Game of life engine having the following properties:

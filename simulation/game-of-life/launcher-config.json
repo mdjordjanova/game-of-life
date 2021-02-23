@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "serve:$config=": "ng serve --project=pwa --configuration=$config",
+    "build:$config=": "ng build --project=pwa --configuration=$config,optimize"
+  }
+}
